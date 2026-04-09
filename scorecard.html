@@ -349,6 +349,24 @@ function goStep(n){document.querySelector('.sc-step.active').classList.remove('a
 function validateStep3(){var v=parseFloat(document.getElementById('hourlyCost').value);document.getElementById('btn3').disabled=!(v>=5&&v<=500);if(v)data.hourlyCost=v}
 function validateStep5(){var ind=document.getElementById('industry').value;var em=document.getElementById('userEmail').value;document.getElementById('btn5').disabled=!(ind&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em));data.industry=ind;data.email=em;data.painPoint=document.getElementById('painPoint').value}
 function showResults(){var wk=data.hoursWasted*data.hourlyCost,yr=wk*52,rate=.7,sav=yr*rate,hrs=Math.round(data.hoursWasted*rate);var inv=Math.max(3000,Math.min(sav*.15,25000)),roi=sav/inv;
+/* Send scorecard data to Formspree */
+fetch('https://formspree.io/f/mvzvnokn',{
+  method:'POST',
+  headers:{'Content-Type':'application/json','Accept':'application/json'},
+  body:JSON.stringify({
+    email:data.email,
+    industry:data.industry,
+    painPoint:data.painPoint||'',
+    teamSize:data.teamSize,
+    hoursWasted:data.hoursWasted,
+    hourlyCost:data.hourlyCost,
+    toolCount:data.toolCount,
+    yearlyCost:'$'+yr.toLocaleString(),
+    potentialSavings:'$'+Math.round(sav).toLocaleString(),
+    roiMultiple:roi.toFixed(1)+'x',
+    hoursRecoverable:hrs+' hrs/week'
+  })
+}).catch(function(e){console.error('Scorecard submit error:',e)});
 document.getElementById('totalCost').textContent='$'+yr.toLocaleString();document.getElementById('weeklyCost').textContent='$'+wk.toLocaleString();document.getElementById('savingsValue').textContent='$'+Math.round(sav).toLocaleString();document.getElementById('hoursRecovered').textContent=hrs+' hrs';document.getElementById('roiMultiple').textContent=roi.toFixed(1)+'x';
 document.getElementById('barCostLabel').textContent='$'+yr.toLocaleString()+'/yr';document.getElementById('barInvestLabel').textContent='$'+Math.round(inv).toLocaleString();
 setTimeout(function(){document.getElementById('barCost').style.width='100%';document.getElementById('barInvest').style.width=Math.max(5,(inv/yr)*100)+'%'},200);
