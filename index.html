@@ -1746,7 +1746,6 @@ function validateForm(){
 }
 
 function submitForm(){
-  /* Data payload extraction */
   var d = {
     name: document.getElementById('fName').value,
     email: document.getElementById('fEmail').value,
@@ -1756,14 +1755,24 @@ function submitForm(){
     process: document.getElementById('fProcess').value,
     hours: document.getElementById('fHours').value
   };
-  console.log('Free Build Request:', d);
-
-  /* Show success state */
-  document.getElementById('formState').style.display = 'none';
-  var ss = document.getElementById('successState');
-  ss.style.display = 'block';
-  ss.classList.add('active');
-  document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('submitBtn').disabled=true;
+  document.getElementById('submitBtn').textContent='Sending...';
+  fetch('https://formspree.io/f/mwvwjkld',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(d)
+  }).then(function(r){return r.json()}).then(function(res){
+    document.getElementById('formState').style.display='none';
+    var ss=document.getElementById('successState');
+    ss.style.display='block';
+    ss.classList.add('active');
+    document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'center'});
+  }).catch(function(err){
+    console.error('Form error:',err);
+    document.getElementById('submitBtn').disabled=false;
+    document.getElementById('submitBtn').textContent='Request My Free Build →';
+    alert('Something went wrong. Please try again or email hello@mincac.com directly.');
+  });
 }
 </script>
 </body>
