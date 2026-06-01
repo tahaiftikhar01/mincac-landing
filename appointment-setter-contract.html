@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Appointment Setter Service Agreement</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      line-height: 1.8;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 48px auto;
+      background: #fff;
+      padding: 72px 80px;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+      border-top: 4px solid #1a1a1a;
+    }
+
+    /* Header */
+    .contract-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .contract-header .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .contract-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .contract-header .subtitle {
+      font-size: 13px;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Parties block */
+    .parties {
+      background: #f9f9f7;
+      border: 1px solid #e8e8e4;
+      border-radius: 4px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .party-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .party-name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .party-role {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .party-detail {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-number {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    .section h2 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section p {
+      font-size: 13.5px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .section ul {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .section ul li {
+      font-size: 13.5px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 14px 0;
+    }
+
+    thead tr {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9f9f7;
+    }
+
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background: #fff8e7;
+      border-left: 3px solid #e6b800;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .highlight-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #1a1a1a;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Signature block */
+    .signature-section {
+      margin-top: 56px;
+      padding-top: 32px;
+      border-top: 1px solid #ddd;
+    }
+
+    .signature-section h2 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .sig-block .sig-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    .sig-block .sig-role {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 48px;
+    }
+
+    .sig-line {
+      border-bottom: 1px solid #333;
+      margin-bottom: 6px;
+    }
+
+    .sig-field-label {
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .date-block {
+      margin-top: 8px;
+    }
+
+    .effective-date {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .effective-date span {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; margin: 0; padding: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="contract-header">
+      <div class="label">Independent Contractor Agreement</div>
+      <h1>Appointment Setter Service Agreement</h1>
+      <div class="subtitle">Pay-Per-Attended-Appointment Model &mdash; Cold Email Outreach</div>
+    </div>
+
+    <!-- Effective Date -->
+    <div class="effective-date">
+      Effective Date: <span>__________________, 2025</span>
+    </div>
+
+    <!-- Parties -->
+    <div class="parties">
+      <div>
+        <div class="party-label">Client / Agency</div>
+        <div class="party-name">________________________</div>
+        <div class="party-role">Digital Marketing Agency</div>
+        <div class="party-detail">Hereinafter referred to as "Client"</div>
+      </div>
+      <div>
+        <div class="party-label">Contractor / Setter</div>
+        <div class="party-name">________________________</div>
+        <div class="party-role">Independent Appointment Setter</div>
+        <div class="party-detail">Hereinafter referred to as "Contractor"</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Scope -->
+    <div class="section">
+      <div class="section-number">Section 01</div>
+      <h2>Scope of Services</h2>
+      <p>Contractor agrees to perform the following services on behalf of Client:</p>
+      <ul>
+        <li>Source, research, and build targeted prospect lists of U.S.-based local service business owners (e.g., dentists, plumbers, HVAC, roofers, locksmiths, chiropractors, auto repair) with annual revenue between $500K–$10M.</li>
+        <li>Execute cold email outreach campaigns designed to generate inbound interest in Client's pay-per-result SEO offer.</li>
+        <li>Book qualified Zoom discovery calls directly onto Client's calendar with verified decision-makers (business owner or primary operator only).</li>
+        <li>Handle all pre-call follow-up, reminders, and confirmations to maximize show rates.</li>
+        <li>Maintain a shared tracking sheet with full contact details, outreach status, call date/time, and confirmation status for every booked appointment.</li>
+      </ul>
+    </div>
+
+    <!-- Section 2: Qualified Appointment -->
+    <div class="section">
+      <div class="section-number">Section 02</div>
+      <h2>Definition of a Qualified Appointment</h2>
+      <p>For the purposes of this Agreement, a "Qualified Appointment" is defined as a Zoom call that meets ALL of the following criteria:</p>
+      <ul>
+        <li><strong>Decision-maker present:</strong> The attendee is the business owner or primary operator with authority to purchase marketing services. Gatekeepers, office managers, or employees do not qualify.</li>
+        <li><strong>Attended:</strong> The prospect joins the call and remains for a minimum of <strong>10 minutes</strong>.</li>
+        <li><strong>U.S.-based:</strong> The business operates in the United States.</li>
+        <li><strong>Target niche:</strong> The business falls within the agreed local service verticals outlined in Section 1.</li>
+        <li><strong>Not a duplicate:</strong> The prospect has not previously been contacted by Client or booked through another Contractor channel within the past 90 days.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>No-Show Policy</strong>
+        Appointments where the prospect does not attend, attends for fewer than 10 minutes, or cancels prior to the call are not eligible for compensation. Contractor accepts this risk as part of the pay-per-result model.
+      </div>
+    </div>
+
+    <!-- Section 3: Compensation -->
+    <div class="section">
+      <div class="section-number">Section 03</div>
+      <h2>Compensation</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Monthly Attended Appointments</th>
+            <th>Rate per Attended Call</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Base</td>
+            <td>1 – 10</td>
+            <td>$____________</td>
+          </tr>
+          <tr>
+            <td>Growth</td>
+            <td>11 – 20</td>
+            <td>$____________</td>
+          </tr>
+          <tr>
+            <td>Scale</td>
+            <td>21+</td>
+            <td>$____________</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>Payment cycle:</strong> Client will verify and pay for all qualified attended appointments within <strong>5 business days</strong> following the end of each calendar week (Sunday–Saturday).</p>
+      <p><strong>Payment method:</strong> ________________________ (e.g., Upwork, PayPal, Wise, ACH)</p>
+      <p><strong>Tooling & infrastructure costs:</strong> Contractor is responsible for all costs associated with their own outreach tools, email infrastructure, list-building software, and domain setup. Client does not reimburse tooling expenses unless separately agreed to in writing.</p>
+      <div class="highlight-box">
+        <strong>Trial Period</strong>
+        The first 14 days of this Agreement shall serve as a paid trial. Client may terminate the Agreement at the end of the trial period without cause. Contractor will be compensated for all qualified appointments attended during the trial at the Base rate above.
+      </div>
+    </div>
+
+    <!-- Section 4: Performance Standards -->
+    <div class="section">
+      <div class="section-number">Section 04</div>
+      <h2>Performance Standards &amp; Expectations</h2>
+      <ul>
+        <li><strong>Minimum activity:</strong> Contractor agrees to contact a minimum of <strong>______</strong> new prospects per week via cold email outreach.</li>
+        <li><strong>Show rate floor:</strong> Contractor is expected to maintain a minimum attended show rate of <strong>55%</strong> of all booked calls over any rolling 30-day period. Consistent performance below this threshold may result in contract review or termination.</li>
+        <li><strong>Reporting:</strong> Contractor will update the shared tracking sheet within 24 hours of each call outcome (attended, no-show, rescheduled, cancelled).</li>
+        <li><strong>Outreach compliance:</strong> All outreach must comply with CAN-SPAM Act requirements and applicable U.S. email regulations.</li>
+        <li><strong>Brand representation:</strong> Contractor may not misrepresent Client's services, pricing, or guarantees in outreach copy without written approval.</li>
+      </ul>
+    </div>
+
+    <!-- Section 5: Exclusivity & Non-Compete -->
+    <div class="section">
+      <div class="section-number">Section 05</div>
+      <h2>Exclusivity &amp; Conflict of Interest</h2>
+      <p>This Agreement is <strong>non-exclusive</strong>. Contractor may work with other clients, provided that:</p>
+      <ul>
+        <li>Contractor does not simultaneously run outreach campaigns for a direct competitor agency offering pay-per-result SEO to the same target verticals without prior written disclosure to Client.</li>
+        <li>Contractor does not share Client's prospect lists, messaging frameworks, or outreach data with any third party.</li>
+      </ul>
+    </div>
+
+    <!-- Section 6: Confidentiality -->
+    <div class="section">
+      <div class="section-number">Section 06</div>
+      <h2>Confidentiality</h2>
+      <p>Contractor agrees to keep confidential all non-public information shared by Client, including but not limited to: prospect lists, client lists, outreach sequences, pricing, offer structure, conversion data, and any business information designated as confidential. This obligation survives termination of this Agreement for a period of <strong>2 years</strong>.</p>
+    </div>
+
+    <!-- Section 7: Intellectual Property -->
+    <div class="section">
+      <div class="section-number">Section 07</div>
+      <h2>Intellectual Property</h2>
+      <p>Any outreach sequences, email copy, or prospect lists created specifically for Client under this Agreement are the property of <strong>Client</strong> upon creation. Contractor retains the right to use anonymized, non-client-specific frameworks and methodologies in future engagements.</p>
+      <p>Prospect lists built by Contractor using their own tooling and resources remain the property of Contractor unless Client separately compensates for list acquisition.</p>
+    </div>
+
+    <!-- Section 8: Independent Contractor -->
+    <div class="section">
+      <div class="section-number">Section 08</div>
+      <h2>Independent Contractor Status</h2>
+      <p>Contractor is an independent contractor and not an employee of Client. Contractor is solely responsible for their own taxes, insurance, and compliance with applicable laws. Client will not withhold income taxes, pay Social Security, or provide employee benefits of any kind.</p>
+    </div>
+
+    <!-- Section 9: Termination -->
+    <div class="section">
+      <div class="section-number">Section 09</div>
+      <h2>Termination</h2>
+      <p>Either party may terminate this Agreement with <strong>7 days' written notice</strong>. Client may terminate immediately and without notice in the event of:</p>
+      <ul>
+        <li>Fraudulent appointment booking (fake leads, self-referrals, or inflated show data)</li>
+        <li>Breach of confidentiality</li>
+        <li>Violation of CAN-SPAM or any applicable law</li>
+        <li>Misrepresentation of Client's services to prospects</li>
+      </ul>
+      <p>Upon termination, Client will pay for all verified qualified appointments attended prior to the termination date within 5 business days.</p>
+    </div>
+
+    <!-- Section 10: Dispute Resolution -->
+    <div class="section">
+      <div class="section-number">Section 10</div>
+      <h2>Dispute Resolution</h2>
+      <p>In the event of a dispute regarding whether an appointment qualifies for payment, the parties agree to resolve the matter first through good-faith discussion. If unresolved within 7 days, either party may escalate to binding arbitration under the rules of the American Arbitration Association. The prevailing party shall bear their own costs unless the arbitrator rules otherwise.</p>
+      <p>This Agreement shall be governed by the laws of the State of <strong>________________</strong>.</p>
+    </div>
+
+    <!-- Section 11: Entire Agreement -->
+    <div class="section">
+      <div class="section-number">Section 11</div>
+      <h2>Entire Agreement</h2>
+      <p>This Agreement constitutes the entire understanding between the parties with respect to the subject matter herein and supersedes all prior discussions, representations, and agreements, whether oral or written. Any amendments must be in writing and signed by both parties.</p>
+    </div>
+
+    <!-- Signatures -->
+    <div class="signature-section">
+      <h2>Signatures</h2>
+      <div class="sig-grid">
+        <div class="sig-block">
+          <div class="sig-label">Client / Agency</div>
+          <div class="sig-role">Digital Marketing Agency</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Signature</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Printed Name</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Title</div>
+          <div class="date-block">
+            <div class="sig-line"></div>
+            <div class="sig-field-label">Date</div>
+          </div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-label">Contractor / Setter</div>
+          <div class="sig-role">Independent Appointment Setter</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Signature</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Printed Name</div>
+          <div class="sig-line"></div>
+          <div class="sig-field-label">Business / Trading Name (if applicable)</div>
+          <div class="date-block">
+            <div class="sig-line"></div>
+            <div class="sig-field-label">Date</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
