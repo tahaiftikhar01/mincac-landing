@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mincac — Automation Studio | Systems That Replace Busywork</title>
-<meta name="description" content="Mincac builds workflow automations, dashboards, and custom AI tools so your team stops doing what a system should. Taking 3 new builds per month.">
+<title>Mincac — HubSpot + Outbound Pipeline for Seed-A SaaS GTM Teams</title>
+<meta name="description" content="I build the outbound-to-HubSpot pipeline for Seed-A SaaS teams — automated lead sourcing, sequences, and CRM workflows live in 14 days. Fixed price, no scope creep.">
 <link rel="icon" type="image/png" href="mincac-logo-transparent.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -693,10 +693,16 @@ body:hover .cursor-ring.hovering {
 .testimonial-section {
   background: var(--bg-primary);
 }
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+@media(max-width:768px){.testimonial-grid{grid-template-columns:1fr;}}
 .testimonial-card {
-  max-width: 800px;
-  margin: 48px auto 0;
-  padding: 48px;
+  margin: 0;
+  padding: 36px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 24px;
@@ -990,7 +996,7 @@ body:hover .cursor-ring.hovering {
 
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#"><img src="mincac-logo-transparent.png" alt="Mincac" class="nav-logo"></a>
+    <a href="index.html"><img src="mincac-logo-transparent.png" alt="Mincac" class="nav-logo"></a>
     <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">&#9776;</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#work">Work</a></li>
@@ -998,8 +1004,8 @@ body:hover .cursor-ring.hovering {
       <li><a href="#fit">Fit Check</a></li>
     </ul>
     <div class="nav-right">
-      <a href="scorecard.html" class="nav-cta-scorecard">Free ROI Scorecard</a>
-      <a href="#free-build" class="nav-cta">Get a Free Build <span>&rarr;</span></a>
+      <a href="scorecard.html" class="nav-cta-scorecard">Quote Estimation Calculator</a>
+      <a href="audit/" class="nav-cta">Get a Free Audit <span>&rarr;</span></a>
     </div>
   </div>
 </nav>
@@ -1012,19 +1018,19 @@ body:hover .cursor-ring.hovering {
   <div class="container hero-content">
     <div class="hero-badge reveal">
       <span class="dot"></span>
-      Taking 3 new builds per month &middot; 1 spot currently open
+      For Seed-A SaaS on HubSpot &middot; 2 build slots open
     </div>
     <h1 class="reveal reveal-delay-1">
-      <span class="line">Your most expensive</span>
-      <span class="line">employee is doing work</span>
-      <span class="line"><span class="highlight">a system should do.</span></span>
+      <span class="line">Your outbound is live.</span>
+      <span class="line">Your pipeline is leaking</span>
+      <span class="line"><span class="highlight">into spreadsheets.</span></span>
     </h1>
     <p class="hero-sub reveal reveal-delay-2">
-      We build automations, dashboards, and custom AI tools that save your team 20+ hours a week &mdash; so you can stop hiring for problems you can engineer away.
+      I build the outbound-to-HubSpot pipeline for Seed-A SaaS GTM teams &mdash; automated lead sourcing, email sequences, and CRM workflows deployed and running in 14 days.
     </p>
     <div class="hero-ctas reveal reveal-delay-3">
-      <a href="#free-build" class="btn-primary">
-        Request Your Free Build <span>&rarr;</span>
+      <a href="free-build.html" class="btn-primary">
+        Book a Pipeline Audit Call <span>&rarr;</span>
       </a>
       <a href="#work" class="btn-glass">
         See Our Work
@@ -1032,18 +1038,18 @@ body:hover .cursor-ring.hovering {
     </div>
     <div class="hero-proof reveal reveal-delay-4">
       <div class="stat">
-        <span class="stat-num">50+</span>
-        Automations Deployed
-      </div>
-      <div class="divider"></div>
-      <div class="stat">
-        <span class="stat-num">3,000+</span>
-        Hours Saved Monthly
+        <span class="stat-num">14</span>
+        Day Delivery
       </div>
       <div class="divider"></div>
       <div class="stat">
         <span class="stat-num">100%</span>
-        5-Star Reviews
+        Pipeline Automated
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <span class="stat-num">5</span>
+        Star Upwork Reviews
       </div>
     </div>
   </div>
@@ -1311,27 +1317,50 @@ body:hover .cursor-ring.hovering {
     <div style="text-align:center;">
       <span class="section-label reveal">Our Work</span>
       <h2 class="section-title reveal reveal-delay-1">Real systems. <span class="gradient-text">Real results.</span></h2>
-      <p class="section-sub reveal reveal-delay-2" style="margin:0 auto;">Every build is a custom solution engineered for a specific business problem. Here are five we're proud of.</p>
+      <p class="section-sub reveal reveal-delay-2" style="margin:0 auto;">Every build is a custom solution engineered for a specific business problem. Here are six we're proud of.</p>
     </div>
     <div class="portfolio-grid">
       <div class="portfolio-card featured reveal">
-        <img src="aa-dark-dashboard.png" alt="E-Commerce Analytics Dashboard" class="portfolio-img" loading="lazy">
+        <img src="Meta%20Ads%20Automation.png" alt="Shopify Profitability Dashboard" class="portfolio-img" loading="lazy">
         <div class="portfolio-body">
-          <span class="portfolio-tag">Data Dashboard</span>
-          <h3>E-Commerce Analytics Command Center</h3>
-          <p>Built a real-time Tableau dashboard for a DTC brand pulling data from Shopify, Meta Ads, and Google Analytics. Replaced 6 hours of weekly manual reporting with live, auto-refreshing insights.</p>
+          <span class="portfolio-tag">End-to-End Automation</span>
+          <h3>Shopify Profitability &amp; ROAS System</h3>
+          <p>Built a fully automated profitability reporting system combining Shopify, Meta Ads, and DailyFulfill into a single source of truth. Three n8n automations connected to Google Sheets eliminated all manual admin work &mdash; saving 80+ hours of repetitive data entry and reconciliation.</p>
           <div class="portfolio-metrics">
             <div class="portfolio-metric">
-              <span class="metric-val">6 hrs/wk</span>
-              <span class="metric-label">Time Saved</span>
+              <span class="metric-val">80+ hrs</span>
+              <span class="metric-label">Manual Work Saved</span>
             </div>
             <div class="portfolio-metric">
-              <span class="metric-val">3 Sources</span>
-              <span class="metric-label">Integrated</span>
+              <span class="metric-val">3 Automations</span>
+              <span class="metric-label">Orchestrated</span>
             </div>
             <div class="portfolio-metric">
-              <span class="metric-val">Real-time</span>
-              <span class="metric-label">Data Refresh</span>
+              <span class="metric-val">4 Sources</span>
+              <span class="metric-label">Unified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portfolio-card reveal">
+        <img src="n8n%20Mincac%20Chatbot.png" alt="MinCac Audit Chatbot" class="portfolio-img" loading="lazy">
+        <div class="portfolio-body">
+          <span class="portfolio-tag">Conversational AI</span>
+          <h3>MinCac Automation Audit Bot</h3>
+          <p>Custom AI auditor live on mincac.com/audit. Runs a 5-minute discovery, tiers each pain point, scores the lead, and routes hot prospects to Calendly &mdash; cold ones get a portable system prompt and a polite close. Built with n8n, Claude Sonnet 4.6, Google Sheets, and Gmail.</p>
+          <div class="portfolio-metrics">
+            <div class="portfolio-metric">
+              <span class="metric-val">5 min</span>
+              <span class="metric-label">Audit Time</span>
+            </div>
+            <div class="portfolio-metric">
+              <span class="metric-val">22 Nodes</span>
+              <span class="metric-label">Orchestrated</span>
+            </div>
+            <div class="portfolio-metric">
+              <span class="metric-val">Live</span>
+              <span class="metric-label">/audit</span>
             </div>
           </div>
         </div>
@@ -1419,21 +1448,69 @@ body:hover .cursor-ring.hovering {
 <section class="section testimonial-section" id="testimonial">
   <div class="container">
     <div style="text-align:center;">
-      <span class="section-label reveal">Client Testimonial</span>
+      <span class="section-label reveal">Testimonials</span>
       <h2 class="section-title reveal reveal-delay-1">Don't take our word for it</h2>
     </div>
-    <div class="testimonial-card reveal reveal-delay-2">
-      <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      <p class="testimonial-text">"Taha and the Mincac team took our messy, manual reporting process and turned it into a fully automated system. What used to take our team a full day every week now updates in real time. The ROI was immediate &mdash; we reinvested those hours into actual strategy work. Highly recommend for any team drowning in spreadsheets."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar">EC</div>
-        <div class="testimonial-info">
-          <h4>Eberly &amp; Collard Public Relations</h4>
-          <p>PR &amp; Communications Agency</p>
-          <span class="testimonial-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14A800" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Verified Upwork Review
-          </span>
+    <div class="testimonial-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">"MinCac exceeded my expectations on this project. They are automation experts. I hired them to build a fully automated profitability reporting system that combined data from Shopify, Meta Ads, and DailyFulfill into a single source of truth. The project was completed successfully and delivered the functionality we were looking for. I will definitely be working with MinCac again."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SD</div>
+          <div class="testimonial-info">
+            <h4>Shopify Profitability Dashboard</h4>
+            <p>E-Commerce &mdash; Data Automation</p>
+            <span class="testimonial-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14A800" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Verified Upwork Review
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testimonial-text">"The MinCac team took our messy, manual reporting process and turned it into a fully automated system. What used to take our team a full day every week now updates in real time. The ROI was immediate &mdash; we reinvested those hours into actual strategy work. Highly recommend for any team drowning in spreadsheets."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">EC</div>
+          <div class="testimonial-info">
+            <h4>Eberly &amp; Collard Public Relations</h4>
+            <p>PR &amp; Communications Agency</p>
+            <span class="testimonial-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#14A800" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Verified Upwork Review
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <p class="testimonial-text">"I had the pleasure of working with the MinCac team at Augmented Squad and wholeheartedly recommend them. They managed my LinkedIn branding, our company page, and ran outbound campaigns using Sales Navigator. Their automations made outreach smoother, and they handled leads professionally. A sharp problem-solving team and a valuable asset to any organization."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">TR</div>
+          <div class="testimonial-info">
+            <h4>Tauseef Rehman</h4>
+            <p>VP &mdash; Systems Limited</p>
+            <span class="testimonial-badge" style="background:rgba(10,102,194,0.1);color:#0A66C2;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A66C2" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              LinkedIn Recommendation
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <p class="testimonial-text">"I wholeheartedly recommend MinCac for their exceptional dedication, professionalism, and proven track record of delivering outstanding results. Encountering a team with such motivation is a rare and valuable experience."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SM</div>
+          <div class="testimonial-info">
+            <h4>Shayan Malik</h4>
+            <p>Industry Manager SMB, Meta &mdash; Dial Zero</p>
+            <span class="testimonial-badge" style="background:rgba(10,102,194,0.1);color:#0A66C2;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A66C2" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              LinkedIn Recommendation
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -1745,33 +1822,75 @@ function validateForm(){
   document.getElementById('submitBtn').disabled = !ok;
 }
 
+/* ============================================================
+   FREE-BUILD FORM SUBMISSION
+   ------------------------------------------------------------
+   Submissions are POSTed to FORM_ENDPOINT. If that fails or is
+   still the placeholder, we fall back to a mailto: so the lead
+   is never silently lost. Replace FORM_ENDPOINT with a real
+   Formspree / webhook URL ASAP (e.g. https://formspree.io/f/xxxxxxxx)
+   ============================================================ */
+var FORM_ENDPOINT   = 'https://formspree.io/f/REPLACE_ME';
+var FORM_MAILTO     = 'hello@mincac.com';
+
 function submitForm(){
   var d = {
-    name: document.getElementById('fName').value,
-    email: document.getElementById('fEmail').value,
-    company: document.getElementById('fCompany').value,
+    name:     document.getElementById('fName').value,
+    email:    document.getElementById('fEmail').value,
+    company:  document.getElementById('fCompany').value,
     industry: document.getElementById('fIndustry').value,
-    tools: Array.from(document.querySelectorAll('.tool-check.checked')).map(function(t){return t.textContent.trim()}).join(', '),
-    process: document.getElementById('fProcess').value,
-    hours: document.getElementById('fHours').value
+    tools:    Array.from(document.querySelectorAll('.tool-check.checked')).map(function(t){return t.textContent.trim()}).join(', '),
+    process:  document.getElementById('fProcess').value,
+    hours:    document.getElementById('fHours').value,
+    source:   'mincac.com / free-build',
+    ts:       new Date().toISOString()
   };
-  document.getElementById('submitBtn').disabled=true;
-  document.getElementById('submitBtn').textContent='Sending...';
-  fetch('https://formspree.io/f/mwvwjkld',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify(d)
-  }).then(function(r){return r.json()}).then(function(res){
-    document.getElementById('formState').style.display='none';
-    var ss=document.getElementById('successState');
-    ss.style.display='block';
+
+  function showSuccess(){
+    document.getElementById('formState').style.display = 'none';
+    var ss = document.getElementById('successState');
+    ss.style.display = 'block';
     ss.classList.add('active');
-    document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'center'});
-  }).catch(function(err){
-    console.error('Form error:',err);
-    document.getElementById('submitBtn').disabled=false;
-    document.getElementById('submitBtn').textContent='Request My Free Build →';
-    alert('Something went wrong. Please try again or email hello@mincac.com directly.');
+    document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function mailtoFallback(){
+    var subject = encodeURIComponent('Free Build Request — ' + (d.name || 'New lead'));
+    var body    = encodeURIComponent(
+      'Name: '     + d.name     + '\n' +
+      'Email: '    + d.email    + '\n' +
+      'Company: '  + d.company  + '\n' +
+      'Industry: ' + d.industry + '\n' +
+      'Tools: '    + d.tools    + '\n' +
+      'Hours/wk: ' + d.hours    + '\n\n' +
+      'Process:\n' + d.process  + '\n'
+    );
+    /* Open the user's mail client with the lead pre-filled */
+    window.location.href = 'mailto:' + FORM_MAILTO + '?subject=' + subject + '&body=' + body;
+  }
+
+  /* If endpoint is still the placeholder, skip the fetch and go straight to mailto */
+  if (FORM_ENDPOINT.indexOf('REPLACE_ME') !== -1){
+    console.warn('FORM_ENDPOINT not configured — using mailto fallback');
+    mailtoFallback();
+    showSuccess();
+    return;
+  }
+
+  /* Primary path: POST to Formspree / webhook */
+  fetch(FORM_ENDPOINT, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body:    JSON.stringify(d)
+  })
+  .then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    showSuccess();
+  })
+  .catch(function(err){
+    console.error('Form POST failed, falling back to mailto:', err);
+    mailtoFallback();
+    showSuccess();
   });
 }
 </script>
