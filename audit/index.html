@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>MinCac Automation Audit</title>
+<style>
+  :root {
+    --bg: #000;
+    --fg: #fff;
+    --muted: #888;
+    --border: #222;
+    --bot-bg: #0f0f0f;
+    --user-bg: #1a1a1a;
+    --accent: #fff;
+    --error: #ff6b6b;
+    --radius: 14px;
+    --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 16px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+  }
+
+  header .tagline {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0 0 20px;
+  }
+
+  .trust-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    background: #050505;
+  }
+
+  .trust-card .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #0a0a0a;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    padding: 4px;
+  }
+
+  .trust-card .meta { font-size: 13px; line-height: 1.5; }
+  .trust-card .name { font-weight: 600; color: var(--fg); font-size: 14px; display: block; }
+  .trust-card .founder { color: var(--muted); font-size: 12px; display: block; margin-top: 2px; }
+  .trust-card .link { color: var(--muted); text-decoration: underline; text-decoration-color: #444; }
+  .trust-card .link:hover { color: var(--fg); }
+  .trust-card .privacy { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.5; }
+
+  .chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 0 16px;
+    overflow-y: auto;
+  }
+
+  .msg {
+    max-width: 90%;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    font-size: 15px;
+    line-height: 1.55;
+    word-wrap: break-word;
+    animation: fadeIn 240ms ease-out;
+  }
+
+  .msg.bot {
+    background: var(--bot-bg);
+    align-self: flex-start;
+    border: 1px solid var(--border);
+  }
+
+  .msg.user {
+    background: var(--user-bg);
+    align-self: flex-end;
+    border: 1px solid var(--border);
+  }
+
+  .msg p { margin: 0 0 10px; }
+  .msg p:last-child { margin-bottom: 0; }
+  .msg strong { font-weight: 600; }
+  .msg em { font-style: italic; }
+  .msg code {
+    background: #161616;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+  .msg pre {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 10px 0;
+  }
+  .msg pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 12.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg a { color: var(--fg); text-decoration: underline; }
+  .msg h1, .msg h2, .msg h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 14px 0 8px;
+  }
+  .msg ul, .msg ol { margin: 8px 0; padding-left: 20px; }
+  .msg li { margin: 4px 0; }
+  .msg table {
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13.5px;
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+  .msg table thead { background: #0d0d0d; }
+  .msg table th, .msg table td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .msg table th { font-weight: 600; }
+
+  .typing {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .typing span {
+    width: 6px;
+    height: 6px;
+    background: var(--muted);
+    border-radius: 50%;
+    animation: pulse 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+  .composer {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg);
+    padding: 12px 0 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .composer .row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  #input {
+    flex: 1;
+    min-height: 44px;
+    max-height: 160px;
+    padding: 12px 14px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background: #0a0a0a;
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.4;
+    resize: none;
+    outline: none;
+    transition: border-color 120ms;
+  }
+  #input:focus { border-color: #444; }
+  #input::placeholder { color: #555; }
+
+  #send {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 22px;
+    border: none;
+    background: var(--fg);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 120ms;
+    white-space: nowrap;
+  }
+  #send:disabled { opacity: 0.4; cursor: not-allowed; }
+  #send:hover:not(:disabled) { opacity: 0.85; }
+
+  .skip-btn {
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .skip-btn:hover { color: var(--fg); border-color: #444; }
+
+  .composer .hint {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 6px 4px 0;
+  }
+
+  .error-banner {
+    background: #200;
+    border: 1px solid #500;
+    color: var(--error);
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 60%, 100% { opacity: 0.3; transform: scale(0.9); }
+    30% { opacity: 1; transform: scale(1); }
+  }
+
+  @media (max-width: 480px) {
+    main { padding: 16px 12px 0; }
+    header h1 { font-size: 19px; }
+    header .tagline { font-size: 13px; }
+    .msg { font-size: 14.5px; }
+    .trust-card { padding: 10px; gap: 10px; }
+    .trust-card .avatar { width: 38px; height: 38px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>MinCac Automation Audit</h1>
+    <p class="tagline">Tells you what to automate, what to leave alone, and where you're being lied to.</p>
+  </header>
+
+  <section class="trust-card">
+    <img class="avatar" src="mincac-logo.png" alt="MinCac">
+
+    <div class="meta">
+      <span class="name">MinCac</span>
+      <span class="founder">Founded by <a class="link" href="https://www.linkedin.com/in/tahaiftikhar/" target="_blank" rel="noopener">Taha Iftikhar</a></span>
+      <div class="privacy">Private conversation. Only MinCac sees this. Not shared, not sold, not used for AI training. Deleted after 60 days.</div>
+    </div>
+  </section>
+
+  <div class="chat" id="chat" aria-live="polite"></div>
+
+  <div class="composer" id="composer">
+    <div class="row">
+      <textarea id="input" rows="1" placeholder="Type your answer…" autocomplete="off"></textarea>
+      <button id="send" type="button">Send</button>
+    </div>
+    <div class="hint" id="hint">Press Enter to send · Shift+Enter for newline</div>
+  </div>
+</main>
+
+<script>
+  // ──────────────────────────────────────────────────────────────
+  // CONFIG — replace before deploy
+  // ──────────────────────────────────────────────────────────────
+  const WEBHOOK_URL = "https://n8n-production-f5fb9.up.railway.app/webhook/mincac-audit";
+
+  // ──────────────────────────────────────────────────────────────
+  // STATE
+  // ──────────────────────────────────────────────────────────────
+  const SESSION_KEY = "mincac_audit_session_v1";
+  const HISTORY_KEY = "mincac_audit_history_v1";
+  const STATE_KEY = "mincac_audit_state_v1";
+
+  const chat = document.getElementById("chat");
+  const input = document.getElementById("input");
+  const sendBtn = document.getElementById("send");
+  const composer = document.getElementById("composer");
+  const hint = document.getElementById("hint");
+
+  let sessionId = getOrCreateSession();
+  let renderedHistory = loadHistory();
+  let uiState = loadState(); // { mode: 'text' | 'email', awaiting_response: bool }
+
+  // ──────────────────────────────────────────────────────────────
+  // INIT
+  // ──────────────────────────────────────────────────────────────
+  function getOrCreateSession() {
+    let id = localStorage.getItem(SESSION_KEY);
+    if (!id) {
+      id = (crypto.randomUUID && crypto.randomUUID()) || ("s_" + Date.now() + "_" + Math.random().toString(36).slice(2));
+      localStorage.setItem(SESSION_KEY, id);
+    }
+    return id;
+  }
+
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveHistory() {
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(renderedHistory)); }
+    catch (e) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      return raw ? JSON.parse(raw) : { mode: "text", awaiting_response: false };
+    } catch (e) { return { mode: "text", awaiting_response: false }; }
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STATE_KEY, JSON.stringify(uiState)); }
+    catch (e) {}
+  }
+
+  // Replay stored history on load, or show static welcome
+  if (renderedHistory.length > 0) {
+    renderedHistory.forEach(m => appendMessage(m.role, m.content, false));
+  } else {
+    showWelcome();
+  }
+
+  if (uiState.mode === "email") setEmailMode();
+
+  function showWelcome() {
+    const welcome = "Hi. I run a 5-minute audit on what's worth automating in your business — and what isn't. Tell me what your business does in one sentence to start.";
+    appendMessage("bot", welcome, true);
+  }
+
+  async function postMessage(message) {
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId, message })
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return await res.json();
+  }
+
+  async function handleSend() {
+    const text = input.value.trim();
+    if (!text || uiState.awaiting_response) return;
+
+    appendMessage("user", text, true);
+    input.value = "";
+    autoResize();
+    uiState.awaiting_response = true;
+    saveState();
+    setSendDisabled(true);
+    showTyping();
+
+    try {
+      const resp = await postMessage(text);
+      hideTyping();
+      handleBotResponse(resp);
+    } catch (e) {
+      hideTyping();
+      showError("Connection issue. Tap send to retry.");
+      uiState.awaiting_response = false;
+      saveState();
+      setSendDisabled(false);
+    }
+  }
+
+  function handleBotResponse(resp) {
+    uiState.awaiting_response = false;
+    saveState();
+    setSendDisabled(false);
+
+    if (!resp || typeof resp.reply !== "string") {
+      showError("Got an empty response. Tap send to retry.");
+      return;
+    }
+
+    // Strip sentinels and AUDIT_JSON fence before rendering
+    const cleaned = stripSentinels(resp.reply);
+    if (cleaned.trim()) appendMessage("bot", cleaned, true);
+
+    if (resp.rate_limited) {
+      lockComposer("Limit reached. Try again tomorrow.");
+      return;
+    }
+    if (resp.capacity_error) {
+      lockComposer("Auditor temporarily unavailable. Email taha@mincac.com to continue.");
+      return;
+    }
+    if (resp.ready_for_email) {
+      setEmailMode();
+    } else if (uiState.mode === "email") {
+      setTextMode();
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────────
+  // SENTINEL / AUDIT_JSON STRIPPING (concern #1, client-side)
+  // ──────────────────────────────────────────────────────────────
+  function stripSentinels(text) {
+    let out = text;
+    out = out.replace(/```AUDIT_JSON[\s\S]*?```/g, "");
+    out = out.replace(/\[READY_FOR_EMAIL\]/g, "");
+    return out.trim();
+  }
+
+  // ──────────────────────────────────────────────────────────────
+  // INPUT MODES
+  // ──────────────────────────────────────────────────────────────
+  function setEmailMode() {
+    uiState.mode = "email";
+    saveState();
+    composer.querySelector(".row").innerHTML = "";
+    const emailIn = document.createElement("input");
+    emailIn.type = "email";
+    emailIn.id = "email-input";
+    emailIn.placeholder = "you@company.com";
+    emailIn.autocomplete = "email";
+    emailIn.style.cssText = "flex:1;height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--border);background:#0a0a0a;color:var(--fg);font-family:var(--font);font-size:15px;outline:none;";
+
+    const submit = document.createElement("button");
+    submit.id = "send";
+    submit.className = "";
+    submit.textContent = "Send";
+    submit.style.cssText = "height:44px;padding:0 18px;border-radius:22px;border:none;background:var(--fg);color:var(--bg);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;";
+
+    const skip = document.createElement("button");
+    skip.className = "skip-btn";
+    skip.textContent = "Skip";
+
+    composer.querySelector(".row").append(emailIn, submit, skip);
+    hint.textContent = "Drop your email to get the audit by mail, or skip.";
+
+    emailIn.focus();
+    submit.addEventListener("click", () => submitEmailOrSkip(emailIn.value.trim() || "skip"));
+    skip.addEventListener("click", () => submitEmailOrSkip("skip"));
+    emailIn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); submit.click(); }
+    });
+  }
+
+  function setTextMode() {
+    uiState.mode = "text";
+    saveState();
+    composer.querySelector(".row").innerHTML = `
+      <textarea id="input" rows="1" placeholder="Type your answer…" autocomplete="off"></textarea>
+      <button id="send" type="button">Send</button>
+    `;
+    hint.textContent = "Press Enter to send · Shift+Enter for newline";
+    bindComposer();
+    document.getElementById("input").focus();
+  }
+
+  async function submitEmailOrSkip(value) {
+    appendMessage("user", value, true);
+    setTextMode();
+    uiState.awaiting_response = true;
+    saveState();
+    setSendDisabled(true);
+    showTyping();
+    try {
+      const resp = await postMessage(value);
+      hideTyping();
+      handleBotResponse(resp);
+    } catch (e) {
+      hideTyping();
+      showError("Connection issue. Tap send to retry.");
+      uiState.awaiting_response = false;
+      saveState();
+      setSendDisabled(false);
+    }
+  }
+
+  function lockComposer(msg) {
+    composer.querySelector(".row").innerHTML = `<div style="flex:1;padding:12px 14px;color:var(--muted);font-size:14px;">${escapeHtml(msg)}</div>`;
+    hint.textContent = "";
+  }
+
+  // ──────────────────────────────────────────────────────────────
+  // RENDERING
+  // ──────────────────────────────────────────────────────────────
+  function appendMessage(role, content, persist) {
+    const div = document.createElement("div");
+    div.className = "msg " + (role === "user" ? "user" : "bot");
+    div.innerHTML = role === "bot" ? renderMarkdown(content) : escapeHtml(content).replace(/\n/g, "<br>");
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+
+    if (persist) {
+      renderedHistory.push({ role, content });
+      // Cap stored history at ~50 entries to keep localStorage sane
+      if (renderedHistory.length > 50) renderedHistory = renderedHistory.slice(-50);
+      saveHistory();
+    }
+  }
+
+  function showTyping() {
+    hideTyping();
+    const div = document.createElement("div");
+    div.className = "msg bot typing-msg";
+    div.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function hideTyping() {
+    const t = chat.querySelector(".typing-msg");
+    if (t) t.remove();
+  }
+
+  function showError(msg) {
+    const div = document.createElement("div");
+    div.className = "error-banner";
+    div.textContent = msg;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    setTimeout(() => div.remove(), 6000);
+  }
+
+  function setSendDisabled(d) {
+    const btn = document.getElementById("send");
+    if (btn) btn.disabled = d;
+  }
+
+  // ──────────────────────────────────────────────────────────────
+  // MINIMAL MARKDOWN RENDERER (no external libs per brief)
+  // Supports: headers, bold, italic, inline code, code blocks,
+  // links, lists, GFM-style tables, line breaks. Sanitized output.
+  // ──────────────────────────────────────────────────────────────
+  function renderMarkdown(src) {
+    // Escape HTML first, then re-inject markdown formatting.
+    let s = escapeHtml(src);
+
+    // Code blocks ```...```
+    s = s.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      `<pre><code>${code.replace(/\n$/, "")}</code></pre>`
+    );
+
+    // Tables (GFM)
+    s = s.replace(/(^\|.+\|\n\|[-:|\s]+\|\n(?:\|.*\|\n?)+)/gm, renderTable);
+
+    // Headers
+    s = s.replace(/^### (.*)$/gm, "<h3>$1</h3>");
+    s = s.replace(/^## (.*)$/gm, "<h2>$1</h2>");
+    s = s.replace(/^# (.*)$/gm, "<h1>$1</h1>");
+
+    // Bold / italic / inline code
+    s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+    s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+
+    // Links [text](url) — only http(s) and mailto
+    s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+    // Auto-link bare URLs (must not already be inside an <a> tag)
+    s = s.replace(/(^|[\s(])((https?:\/\/[^\s<)]+))/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+
+    // Bullet lists
+    s = s.replace(/(?:^|\n)((?:- .*(?:\n|$))+)/g, (_, block) => {
+      const items = block.trim().split("\n").map(line => `<li>${line.replace(/^- /, "")}</li>`).join("");
+      return `\n<ul>${items}</ul>`;
+    });
+
+    // Numbered lists
+    s = s.replace(/(?:^|\n)((?:\d+\. .*(?:\n|$))+)/g, (_, block) => {
+      const items = block.trim().split("\n").map(line => `<li>${line.replace(/^\d+\.\s+/, "")}</li>`).join("");
+      return `\n<ol>${items}</ol>`;
+    });
+
+    // Paragraphs (blank-line separated)
+    const blocks = s.split(/\n{2,}/).map(b => {
+      if (/^<(h\d|ul|ol|pre|table)/.test(b.trim())) return b;
+      return `<p>${b.replace(/\n/g, "<br>")}</p>`;
+    });
+
+    return blocks.join("\n");
+  }
+
+  function renderTable(tableMd) {
+    const lines = tableMd.trim().split("\n");
+    const headers = lines[0].split("|").slice(1, -1).map(c => c.trim());
+    const rows = lines.slice(2).map(line => line.split("|").slice(1, -1).map(c => c.trim()));
+    const head = `<thead><tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
+    const body = `<tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+    return `<table>${head}${body}</table>`;
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // ──────────────────────────────────────────────────────────────
+  // COMPOSER BINDINGS
+  // ──────────────────────────────────────────────────────────────
+  function bindComposer() {
+    const ta = document.getElementById("input");
+    const btn = document.getElementById("send");
+    if (!ta || !btn) return;
+    ta.addEventListener("input", autoResize);
+    ta.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+    btn.addEventListener("click", handleSend);
+    ta.focus();
+  }
+
+  function autoResize() {
+    const ta = document.getElementById("input");
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+  }
+
+  bindComposer();
+
+  // ──────────────────────────────────────────────────────────────
+  // DEV HELPER — reset session by appending ?reset=1 to the URL
+  // ──────────────────────────────────────────────────────────────
+  if (new URLSearchParams(location.search).get("reset") === "1") {
+    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(HISTORY_KEY);
+    localStorage.removeItem(STATE_KEY);
+    location.replace(location.pathname);
+  }
+</script>
+</body>
+</html>
