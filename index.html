@@ -1095,7 +1095,7 @@ body:hover .cursor-ring.hovering {
     </ul>
     <div class="nav-right">
       <a href="scorecard.html" class="nav-cta-scorecard">Quote Estimation Calculator</a>
-      <a href="audit/" class="nav-cta">Get a Free Audit <span>&rarr;</span></a>
+      <a href="https://calendly.com/taha-mincac/30min" target="_blank" rel="noopener" class="nav-cta">Book a Call <span>&rarr;</span></a>
     </div>
   </div>
 </nav>
@@ -1982,7 +1982,23 @@ function submitForm(){
     showSuccess();
   });
 }
+</script>
 
+<!-- Sticky AI Chat Widget -->
+<button class="ai-fab" id="aiFab">
+  <span class="fab-icon">&#129302;</span>
+  <span class="fab-label">Try Our AI</span>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-panel-header">
+    <span>MinCac AI Auditor</span>
+    <button class="chat-panel-close" id="chatPanelClose">&times;</button>
+  </div>
+  <iframe id="chatIframe" title="MinCac AI Audit Chat"></iframe>
+</div>
+
+<script>
 // ===== AI Chatbot Widget Toggle =====
 const aiFab = document.getElementById('aiFab');
 const chatPanel = document.getElementById('chatPanel');
@@ -2003,20 +2019,6 @@ chatClose.addEventListener('click', () => {
   aiFab.style.display = 'flex';
 });
 </script>
-
-<!-- Sticky AI Chat Widget -->
-<button class="ai-fab" id="aiFab">
-  <span class="fab-icon">&#129302;</span>
-  <span class="fab-label">Try Our AI</span>
-</button>
-
-<div class="chat-panel" id="chatPanel">
-  <div class="chat-panel-header">
-    <span>MinCac AI Auditor</span>
-    <button class="chat-panel-close" id="chatPanelClose">&times;</button>
-  </div>
-  <iframe id="chatIframe" title="MinCac AI Audit Chat"></iframe>
-</div>
 
 </body>
 </html>
