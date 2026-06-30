@@ -5,18 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
 <title>MinCac Automation Audit</title>
+<link rel="icon" type="image/png" href="../mincac-logo-transparent.png">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #000;
-    --fg: #fff;
-    --muted: #888;
-    --border: #222;
-    --bot-bg: #0f0f0f;
-    --user-bg: #1a1a1a;
+    --bg: #06010f;
+    --fg: #f0eef6;
+    --muted: rgba(240,238,246,0.5);
+    --border: rgba(255,255,255,0.06);
+    --bot-bg: rgba(255,255,255,0.03);
+    --user-bg: rgba(155,135,245,0.08);
     --accent: #fff;
     --error: #ff6b6b;
     --radius: 14px;
-    --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --purple: #9b87f5;
+    --teal: #00E5B0;
+    --text-secondary: rgba(240,238,246,0.6);
+    --font-heading: 'Sora', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
 
   * { box-sizing: border-box; }
@@ -38,11 +45,77 @@
     flex-direction: column;
   }
 
+  /* ===== NAV (matches main site) ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 16px 0;
+    background: rgba(6,1,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
+  }
+  .nav.scrolled { padding: 10px 0; }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { height: 36px; }
+  .nav-links { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+    font-family: var(--font);
+  }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cta-scorecard {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: rgba(0,229,176,0.06);
+    border: 1px solid rgba(0,229,176,0.2);
+    border-radius: 8px;
+    color: var(--teal);
+    font-size: 13px; font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  .nav-cta-scorecard:hover {
+    background: rgba(0,229,176,0.12);
+    border-color: var(--teal);
+    box-shadow: 0 0 25px rgba(0,229,176,0.12);
+  }
+  .nav-cta-audit {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px;
+    background: var(--teal);
+    border: 1px solid var(--teal);
+    border-radius: 8px;
+    color: #06010f;
+    font-size: 14px; font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-family: var(--font);
+  }
+  .nav-cta-audit:hover {
+    background: #33FFCC;
+    border-color: #33FFCC;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0,229,176,0.3);
+  }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .mobile-toggle { display: none; background: none; border: none; color: var(--fg); font-size: 24px; cursor: pointer; }
+
   main {
     max-width: 760px;
     width: 100%;
     margin: 0 auto;
-    padding: 24px 16px 0;
+    padding: 90px 16px 0;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -279,8 +352,24 @@
     30% { opacity: 1; transform: scale(1); }
   }
 
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .mobile-toggle { display: block; }
+    .nav-right { gap: 10px; }
+    .nav-cta-scorecard { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(6,1,15,0.95);
+      backdrop-filter: blur(20px);
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+  }
+
   @media (max-width: 480px) {
-    main { padding: 16px 12px 0; }
+    main { padding: 80px 12px 0; }
     header h1 { font-size: 19px; }
     header .tagline { font-size: 13px; }
     .msg { font-size: 14.5px; }
@@ -290,6 +379,23 @@
 </style>
 </head>
 <body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html"><img src="../mincac-logo-transparent.png" alt="Mincac" class="nav-logo"></a>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#work">Work</a></li>
+      <li><a href="../index.html#problem">Problems</a></li>
+      <li><a href="../index.html#fit">Fit Check</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="../scorecard.html" class="nav-cta-scorecard">Quote Estimation Calculator</a>
+      <a href="./" class="nav-cta-audit">Get a Free Audit <span>&rarr;</span></a>
+    </div>
+  </div>
+</nav>
+
 <main>
   <header>
     <h1>MinCac Automation Audit</h1>
@@ -310,22 +416,22 @@
 
   <div class="composer" id="composer">
     <div class="row">
-      <textarea id="input" rows="1" placeholder="Type your answer…" autocomplete="off"></textarea>
+      <textarea id="input" rows="1" placeholder="Type your answer‚Ä¶" autocomplete="off"></textarea>
       <button id="send" type="button">Send</button>
     </div>
-    <div class="hint" id="hint">Press Enter to send · Shift+Enter for newline</div>
+    <div class="hint" id="hint">Press Enter to send ¬∑ Shift+Enter for newline</div>
   </div>
 </main>
 
 <script>
-  // ──────────────────────────────────────────────────────────────
-  // CONFIG — replace before deploy
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // CONFIG ‚Äî replace before deploy
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const WEBHOOK_URL = "https://n8n-production-f5fb9.up.railway.app/webhook/mincac-audit";
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // STATE
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const SESSION_KEY = "mincac_audit_session_v1";
   const HISTORY_KEY = "mincac_audit_history_v1";
   const STATE_KEY = "mincac_audit_state_v1";
@@ -340,9 +446,9 @@
   let renderedHistory = loadHistory();
   let uiState = loadState(); // { mode: 'text' | 'email', awaiting_response: bool }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // INIT
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function getOrCreateSession() {
     let id = localStorage.getItem(SESSION_KEY);
     if (!id) {
@@ -386,7 +492,7 @@
   if (uiState.mode === "email") setEmailMode();
 
   function showWelcome() {
-    const welcome = "Hi. I run a 5-minute audit on what's worth automating in your business — and what isn't. Tell me what your business does in one sentence to start.";
+    const welcome = "Hi. I run a 5-minute audit on what's worth automating in your business ‚Äî and what isn't. Tell me what your business does in one sentence to start.";
     appendMessage("bot", welcome, true);
   }
 
@@ -454,9 +560,9 @@
     }
   }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // SENTINEL / AUDIT_JSON STRIPPING (concern #1, client-side)
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function stripSentinels(text) {
     let out = text;
     out = out.replace(/```AUDIT_JSON[\s\S]*?```/g, "");
@@ -464,9 +570,9 @@
     return out.trim();
   }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // INPUT MODES
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function setEmailMode() {
     uiState.mode = "email";
     saveState();
@@ -503,10 +609,10 @@
     uiState.mode = "text";
     saveState();
     composer.querySelector(".row").innerHTML = `
-      <textarea id="input" rows="1" placeholder="Type your answer…" autocomplete="off"></textarea>
+      <textarea id="input" rows="1" placeholder="Type your answer‚Ä¶" autocomplete="off"></textarea>
       <button id="send" type="button">Send</button>
     `;
-    hint.textContent = "Press Enter to send · Shift+Enter for newline";
+    hint.textContent = "Press Enter to send ¬∑ Shift+Enter for newline";
     bindComposer();
     document.getElementById("input").focus();
   }
@@ -536,9 +642,9 @@
     hint.textContent = "";
   }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // RENDERING
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function appendMessage(role, content, persist) {
     const div = document.createElement("div");
     div.className = "msg " + (role === "user" ? "user" : "bot");
@@ -582,11 +688,11 @@
     if (btn) btn.disabled = d;
   }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // MINIMAL MARKDOWN RENDERER (no external libs per brief)
   // Supports: headers, bold, italic, inline code, code blocks,
   // links, lists, GFM-style tables, line breaks. Sanitized output.
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function renderMarkdown(src) {
     // Escape HTML first, then re-inject markdown formatting.
     let s = escapeHtml(src);
@@ -609,7 +715,7 @@
     s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
     s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
 
-    // Links [text](url) — only http(s) and mailto
+    // Links [text](url) ‚Äî only http(s) and mailto
     s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
     // Auto-link bare URLs (must not already be inside an <a> tag)
@@ -654,9 +760,9 @@
       .replace(/'/g, "&#39;");
   }
 
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   // COMPOSER BINDINGS
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function bindComposer() {
     const ta = document.getElementById("input");
     const btn = document.getElementById("send");
@@ -681,15 +787,29 @@
 
   bindComposer();
 
-  // ──────────────────────────────────────────────────────────────
-  // DEV HELPER — reset session by appending ?reset=1 to the URL
-  // ──────────────────────────────────────────────────────────────
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // DEV HELPER ‚Äî reset session by appending ?reset=1 to the URL
+  // ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   if (new URLSearchParams(location.search).get("reset") === "1") {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(HISTORY_KEY);
     localStorage.removeItem(STATE_KEY);
     location.replace(location.pathname);
   }
+
+  // Nav scroll shrink
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+  });
+  // Mobile toggle
+  document.getElementById('mobileToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
 </script>
 </body>
 </html>
