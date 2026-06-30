@@ -437,8 +437,6 @@
   const STATE_KEY = "mincac_audit_state_v1";
 
   const chat = document.getElementById("chat");
-  const input = document.getElementById("input");
-  const sendBtn = document.getElementById("send");
   const composer = document.getElementById("composer");
   const hint = document.getElementById("hint");
 
@@ -507,11 +505,13 @@
   }
 
   async function handleSend() {
-    const text = input.value.trim();
+    const ta = document.getElementById("input");
+    if (!ta) return;
+    const text = (typeof ta.value === 'string' ? ta.value : String(ta.value || '')).trim();
     if (!text || uiState.awaiting_response) return;
 
     appendMessage("user", text, true);
-    input.value = "";
+    ta.value = "";
     autoResize();
     uiState.awaiting_response = true;
     saveState();
