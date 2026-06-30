@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mincac — HubSpot + Outbound Pipeline for Seed-A SaaS GTM Teams</title>
-<meta name="description" content="I build the outbound-to-HubSpot pipeline for Seed-A SaaS teams — automated lead sourcing, sequences, and CRM workflows live in 14 days. Fixed price, no scope creep.">
+<title>MinCac ‚Äî AI Agents & Automations That Work 24/7</title>
+<meta name="description" content="We build AI agents and automations that eliminate manual work, answer every call, book every appointment, and sync to your CRM ‚Äî around the clock.">
 <link rel="icon" type="image/png" href="mincac-logo-transparent.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -861,7 +861,7 @@ body:hover .cursor-ring.hovering {
   flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
 .tool-check.checked .tool-dot { border-color: var(--teal); background: var(--teal); }
-.tool-check.checked .tool-dot::after { content: '✓'; font-size: 11px; color: #07070D; font-weight: 700; }
+.tool-check.checked .tool-dot::after { content: '‚úì'; font-size: 11px; color: #07070D; font-weight: 700; }
 @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
 
 /* Row layout */
@@ -986,6 +986,96 @@ body:hover .cursor-ring.hovering {
   .industries-grid { grid-template-columns: 1fr 1fr; }
   .hero-ctas { flex-direction: column; align-items: center; }
 }
+
+/* ===== STICKY AI CHATBOT WIDGET ===== */
+.ai-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, var(--purple), var(--teal));
+  border: none;
+  border-radius: 100px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 30px rgba(155,135,245,0.35), 0 0 60px rgba(0,229,176,0.12);
+  transition: all 0.3s;
+  animation: fab-pulse 3s ease-in-out infinite;
+}
+.ai-fab:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 40px rgba(155,135,245,0.45), 0 0 80px rgba(0,229,176,0.18);
+}
+.ai-fab .fab-icon { font-size: 20px; line-height: 1; }
+@keyframes fab-pulse {
+  0%, 100% { box-shadow: 0 6px 30px rgba(155,135,245,0.35), 0 0 60px rgba(0,229,176,0.12); }
+  50% { box-shadow: 0 6px 40px rgba(155,135,245,0.5), 0 0 80px rgba(0,229,176,0.2); }
+}
+
+.chat-panel {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 420px;
+  height: 600px;
+  z-index: 9999;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(155,135,245,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(155,135,245,0.1);
+  display: none;
+  flex-direction: column;
+  background: #06010f;
+}
+.chat-panel.open { display: flex; }
+.chat-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(155,135,245,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chat-panel-header span {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.chat-panel-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.chat-panel-close:hover { color: var(--text-primary); }
+.chat-panel iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  background: #06010f;
+}
+
+@media (max-width: 480px) {
+  .ai-fab { bottom: 18px; right: 18px; padding: 12px 20px; font-size: 14px; }
+  .ai-fab .fab-label { display: none; }
+  .chat-panel {
+    bottom: 0; right: 0; left: 0;
+    width: 100%; height: 85vh;
+    border-radius: 20px 20px 0 0;
+  }
+}
 </style>
 </head>
 <body>
@@ -1018,19 +1108,18 @@ body:hover .cursor-ring.hovering {
   <div class="container hero-content">
     <div class="hero-badge reveal">
       <span class="dot"></span>
-      For Seed-A SaaS on HubSpot &middot; 2 build slots open
+      AI Agents &amp; Automation &middot; Always On
     </div>
     <h1 class="reveal reveal-delay-1">
-      <span class="line">Your outbound is live.</span>
-      <span class="line">Your pipeline is leaking</span>
-      <span class="line"><span class="highlight">into spreadsheets.</span></span>
+      <span class="line">Stop hiring humans</span>
+      <span class="line">for <span class="highlight">robot work.</span></span>
     </h1>
     <p class="hero-sub reveal reveal-delay-2">
-      I build the outbound-to-HubSpot pipeline for Seed-A SaaS GTM teams &mdash; automated lead sourcing, email sequences, and CRM workflows deployed and running in 14 days.
+      I build the AI agents and automations that reduce manual &amp; repetitive work, answer every call, book every appointment, and sync to your CRM &mdash; 24/7.
     </p>
     <div class="hero-ctas reveal reveal-delay-3">
-      <a href="free-build.html" class="btn-primary">
-        Book a Pipeline Audit Call <span>&rarr;</span>
+      <a href="audit/" class="btn-primary">
+        Get a Free AI Audit <span>&rarr;</span>
       </a>
       <a href="#work" class="btn-glass">
         See Our Work
@@ -1038,18 +1127,18 @@ body:hover .cursor-ring.hovering {
     </div>
     <div class="hero-proof reveal reveal-delay-4">
       <div class="stat">
-        <span class="stat-num">14</span>
-        Day Delivery
+        <span class="stat-num">80</span>
+        Hours Saved
       </div>
       <div class="divider"></div>
       <div class="stat">
-        <span class="stat-num">100%</span>
-        Pipeline Automated
+        <span class="stat-num">24</span>
+        /7 Uptime
       </div>
       <div class="divider"></div>
       <div class="stat">
         <span class="stat-num">5</span>
-        Star Upwork Reviews
+        Star Reviews
       </div>
     </div>
   </div>
@@ -1624,9 +1713,9 @@ body:hover .cursor-ring.hovering {
             <select class="fi fi-select" id="fHours">
               <option value="">Select hours</option>
               <option>Less than 2 hours</option>
-              <option>2–5 hours</option>
-              <option>5–10 hours</option>
-              <option>10–20 hours</option>
+              <option>2‚Äì5 hours</option>
+              <option>5‚Äì10 hours</option>
+              <option>10‚Äì20 hours</option>
               <option>20+ hours</option>
             </select>
           </div>
@@ -1652,7 +1741,7 @@ body:hover .cursor-ring.hovering {
           </div>
           <div class="next-step">
             <div class="ns-num">2</div>
-            <div class="ns-text"><strong>Within 3–5 days</strong> &mdash; your automation is built, tested, and deployed in your stack</div>
+            <div class="ns-text"><strong>Within 3‚Äì5 days</strong> &mdash; your automation is built, tested, and deployed in your stack</div>
           </div>
           <div class="next-step">
             <div class="ns-num">3</div>
@@ -1855,7 +1944,7 @@ function submitForm(){
   }
 
   function mailtoFallback(){
-    var subject = encodeURIComponent('Free Build Request — ' + (d.name || 'New lead'));
+    var subject = encodeURIComponent('Free Build Request ‚Äî ' + (d.name || 'New lead'));
     var body    = encodeURIComponent(
       'Name: '     + d.name     + '\n' +
       'Email: '    + d.email    + '\n' +
@@ -1871,7 +1960,7 @@ function submitForm(){
 
   /* If endpoint is still the placeholder, skip the fetch and go straight to mailto */
   if (FORM_ENDPOINT.indexOf('REPLACE_ME') !== -1){
-    console.warn('FORM_ENDPOINT not configured — using mailto fallback');
+    console.warn('FORM_ENDPOINT not configured ‚Äî using mailto fallback');
     mailtoFallback();
     showSuccess();
     return;
@@ -1893,6 +1982,41 @@ function submitForm(){
     showSuccess();
   });
 }
+
+// ===== AI Chatbot Widget Toggle =====
+const aiFab = document.getElementById('aiFab');
+const chatPanel = document.getElementById('chatPanel');
+const chatClose = document.getElementById('chatPanelClose');
+let chatLoaded = false;
+
+aiFab.addEventListener('click', () => {
+  chatPanel.classList.add('open');
+  aiFab.style.display = 'none';
+  if (!chatLoaded) {
+    document.getElementById('chatIframe').src = 'audit/';
+    chatLoaded = true;
+  }
+});
+
+chatClose.addEventListener('click', () => {
+  chatPanel.classList.remove('open');
+  aiFab.style.display = 'flex';
+});
 </script>
+
+<!-- Sticky AI Chat Widget -->
+<button class="ai-fab" id="aiFab">
+  <span class="fab-icon">&#129302;</span>
+  <span class="fab-label">Try Our AI</span>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-panel-header">
+    <span>MinCac AI Auditor</span>
+    <button class="chat-panel-close" id="chatPanelClose">&times;</button>
+  </div>
+  <iframe id="chatIframe" title="MinCac AI Audit Chat"></iframe>
+</div>
+
 </body>
 </html>
