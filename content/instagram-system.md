@@ -73,7 +73,7 @@ Related angles you're already credible on: why "AI agent" is mostly a rebrand of
 
 ## 4. The LinkedIn → Instagram repurposing pipeline
 
-You already have distribution on LinkedIn. Don't write twice — convert.
+You already have distribution on LinkedIn. Don't write twice — convert. (For the full three-platform version including X, see `x-system.md` §6.)
 
 1. **Pick your top LinkedIn post each week** (by comments, not likes — comments mean it hit a nerve).
 2. **Rewrite the hook for a spoken opening.** LinkedIn hooks are written to be read in a scroll; Instagram hooks must be *said* in the first two seconds. "Most agencies are lying about AI" reads fine on LinkedIn and dies on camera. "I've built 40 of these. Most of what you see labelled 'AI agent' isn't one." works.
