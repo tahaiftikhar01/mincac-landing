@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MinCac ‚Äî AI Agents & Automations That Work 24/7</title>
-<meta name="description" content="We build AI agents and automations that eliminate manual work, answer every call, book every appointment, and sync to your CRM ‚Äî around the clock.">
+<title>MinCac — AI Agents & Automations That Work 24/7</title>
+<meta name="description" content="We build AI agents and automations that eliminate manual work, answer every call, book every appointment, and sync to your CRM — around the clock.">
 <link rel="icon" type="image/png" href="mincac-logo-transparent.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -861,7 +861,7 @@ body:hover .cursor-ring.hovering {
   flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
 .tool-check.checked .tool-dot { border-color: var(--teal); background: var(--teal); }
-.tool-check.checked .tool-dot::after { content: '‚úì'; font-size: 11px; color: #07070D; font-weight: 700; }
+.tool-check.checked .tool-dot::after { content: '✓'; font-size: 11px; color: #07070D; font-weight: 700; }
 @media (max-width: 600px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
 
 /* Row layout */
@@ -1713,9 +1713,9 @@ body:hover .cursor-ring.hovering {
             <select class="fi fi-select" id="fHours">
               <option value="">Select hours</option>
               <option>Less than 2 hours</option>
-              <option>2‚Äì5 hours</option>
-              <option>5‚Äì10 hours</option>
-              <option>10‚Äì20 hours</option>
+              <option>2–5 hours</option>
+              <option>5–10 hours</option>
+              <option>10–20 hours</option>
               <option>20+ hours</option>
             </select>
           </div>
@@ -1741,7 +1741,7 @@ body:hover .cursor-ring.hovering {
           </div>
           <div class="next-step">
             <div class="ns-num">2</div>
-            <div class="ns-text"><strong>Within 3‚Äì5 days</strong> &mdash; your automation is built, tested, and deployed in your stack</div>
+            <div class="ns-text"><strong>Within 3–5 days</strong> &mdash; your automation is built, tested, and deployed in your stack</div>
           </div>
           <div class="next-step">
             <div class="ns-num">3</div>
@@ -1944,7 +1944,7 @@ function submitForm(){
   }
 
   function mailtoFallback(){
-    var subject = encodeURIComponent('Free Build Request ‚Äî ' + (d.name || 'New lead'));
+    var subject = encodeURIComponent('Free Build Request — ' + (d.name || 'New lead'));
     var body    = encodeURIComponent(
       'Name: '     + d.name     + '\n' +
       'Email: '    + d.email    + '\n' +
@@ -1960,7 +1960,7 @@ function submitForm(){
 
   /* If endpoint is still the placeholder, skip the fetch and go straight to mailto */
   if (FORM_ENDPOINT.indexOf('REPLACE_ME') !== -1){
-    console.warn('FORM_ENDPOINT not configured ‚Äî using mailto fallback');
+    console.warn('FORM_ENDPOINT not configured — using mailto fallback');
     mailtoFallback();
     showSuccess();
     return;
