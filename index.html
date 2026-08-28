@@ -116,7 +116,7 @@ body {
 .nav-dropdown-panel {
   position: absolute; top: calc(100% + 18px); left: 50%; transform: translateX(-50%) translateY(-8px);
   background: var(--hero-bg-deep); border: 1px solid var(--hero-border); border-radius: 14px;
-  padding: 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; width: 380px;
+  padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; width: 520px;
   opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s;
   box-shadow: 0 24px 60px rgba(0,0,0,0.5);
 }
@@ -464,6 +464,10 @@ body {
 <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
 <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></symbol>
+<symbol id="i-factory" viewBox="0 0 24 24"><path d="M3 21V10l5 3.5V10l5 3.5V10l5 3.5V21H3z"/><path d="M9 6V3M9 3l2 1.5"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h10v10H2z"/><path d="M12 10h4l4 3v3h-8z"/><circle cx="6" cy="18.5" r="1.6"/><circle cx="16.5" cy="18.5" r="1.6"/><path d="M2 16h2M18.5 16.5h1.5"/></symbol>
+<symbol id="i-chart-up" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M3 16l5-5 4 4 8-8"/><path d="M15 7h5v5"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 005.4-5.4l-2.5 2.5-2-2 2.5-2.5z"/></symbol>
 </defs>
 </svg>
 
@@ -486,6 +490,11 @@ body {
           <a href="#industries">B2B SaaS</a>
           <a href="#industries">Real Estate</a>
           <a href="#industries">Consultants</a>
+          <a href="#industries">Manufacturing</a>
+          <a href="#industries">Field Services</a>
+          <a href="#industries">Distribution &amp; Logistics</a>
+          <a href="#industries">Financial Services</a>
+          <a href="#industries">PE Portfolio Companies</a>
         </div>
       </li>
       <li><a href="#team">Team</a></li>
@@ -698,6 +707,11 @@ body {
       <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-layers"/></svg></div><h4>B2B SaaS</h4><p>Onboarding flows, churn alerts</p></div>
       <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-home"/></svg></div><h4>Real Estate</h4><p>Lead routing, CRM automation</p></div>
       <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-briefcase"/></svg></div><h4>Consultants</h4><p>Proposal generation, invoicing</p></div>
+      <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-factory"/></svg></div><h4>Manufacturing</h4><p>Production tracking, quality logs</p></div>
+      <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-wrench"/></svg></div><h4>Field Services</h4><p>Dispatch routing, job tracking</p></div>
+      <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-truck"/></svg></div><h4>Distribution &amp; Logistics</h4><p>Inventory visibility, shipment tracking</p></div>
+      <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-dollar"/></svg></div><h4>Financial Services</h4><p>Compliance reporting, reconciliation</p></div>
+      <div class="industry-tile reveal"><div class="ind-icon-wrap"><svg class="icon"><use href="#i-chart-up"/></svg></div><h4>PE Portfolio Companies</h4><p>Cross-portfolio reporting, KPI rollups</p></div>
     </div>
   </div>
 </section>
