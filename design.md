@@ -1,32 +1,52 @@
-# MinCac.com Revamp — Design Spec (v2)
+# MinCac.com Revamp — Design Spec (v4)
 
-Status: draft for review, round 2. Nothing in this repo outside this file has
+Status: draft for review, round 4. Nothing in this repo outside this file has
 been touched yet. See the companion Artifact for a visual mockup of
 everything below.
 
 ## Design direction
 
-Reference: beew.studio (screenshot supplied). Borrowing the structural/
-editorial cues, not the light color scheme: hairline-divider numbered lists
-instead of heavy bordered card grids, borderless pill badges, bold centered
-statement breaks, tighter more confident type. Keeping MinCac's existing dark
-theme and brand colors as the default, now paired with a real light mode too
-(see Theme toggle below):
+Two references now. beew.studio (round 1) set the structural/editorial cues:
+hairline-divider numbered lists instead of heavy bordered card grids,
+borderless pill badges, bold centered statement breaks. techjays.com (round
+4, a direct competitor in the same industries, 5 screenshots supplied) set a
+higher bar: full-bleed photographic hero, a stat bar, a short philosophy
+statement section, and a numbered services list at capability altitude
+("Conversational AI," "Data Intelligence"...) rather than tool altitude,
+with light pill tags and small abstract graphics instead of colored icon
+chips. Round 4 pulls the site toward techjays' polish and positioning using
+MinCac's own real capabilities and copy, not techjays' words verbatim.
+Keeping MinCac's existing dark theme and brand colors as the default, now
+paired with a real light mode too (see Theme toggle below):
 
 - Background: `#06010f` / `#0a0613` (dark) / off-white (light, see below)
 - Purple: `#9b87f5`
 - Teal: `#00E5B0`
 - Fonts: Sora (headings), Inter (body), JetBrains Mono (labels/tags)
 
-**No emoji anywhere on the site.** Every icon (services, industries, AI/LLM
-cards, problem list, chat widget, star ratings, theme toggle) is a custom
-inline-SVG line icon, single stroke, rounded caps, colored via `currentColor`
-so it inherits purple/teal per context. The tools marquee drops its per-item
-icon chip entirely, clean mono-font text only.
+**No emoji anywhere on the site.** Every icon is a custom inline-SVG line
+icon, single stroke, rounded caps, colored via `currentColor`. The tools
+marquee drops its per-item icon chip entirely, clean mono-font text only.
+
+**Honesty constraint on the techjays-style hero**: techjays uses real
+photography (people at a desk). Nothing like that exists in this repo, and
+inventing a fake "team at work" photo would be dishonest. The hero instead
+gets a substantially richer CSS-only treatment (layered mesh gradient plus a
+subtle grain texture) rather than the flatter gradient orbs from round 1. If
+real photography becomes available, swapping it in later is a small change.
 
 Sections not called out below are unchanged in content from the current live
-site (Problem, Industries, How It Works) — they get the icon swap and light/
-dark tokens applied like everything else, no structural rebuild.
+site (Industries, How It Works) — they get the icon swap and light/dark
+tokens applied like everything else, no structural rebuild.
+
+## Problem section (round 4 restyle)
+
+Content unchanged (same 4 pain points), but the per-item treatment loses
+the individually bordered, rounded-box-with-colored-icon-circle look you
+flagged as reading like a generic SaaS template. Restyled as a simpler
+stacked list with thin hairline top borders between items (the same visual
+language as the Services rows), icon shown small and muted rather than in
+a colored circle badge.
 
 ## Nav
 
@@ -64,6 +84,44 @@ dark tokens applied like everything else, no structural rebuild.
   so it isn't the only place a real Book a Call ask lives, and drops "free":
   **CTA update:** "Ready to get the busywork off your plate?" / "Book a
   30-minute strategy call."
+- **Round 4 visual upgrade:** richer full-bleed background (layered mesh
+  gradient, subtle grain texture, no flat orbs), taller hero, headline set
+  larger and heavier, closer to techjays' scale and confidence. Nav becomes
+  transparent/overlaid on the hero rather than an immediate solid bar,
+  matching the reference. Content stays centered rather than techjays'
+  lower-left anchor, a safer structural choice given there's no real photo
+  to anchor text against.
+
+## Stat Bar (new, round 4)
+
+A full-width 4-column strip directly after the hero, techjays-style: big
+bold numbers, small caps label beneath, thin vertical dividers between
+columns, no card backgrounds or borders. Using only numbers already true on
+the current site, never inventing figures like techjays' "1B+ people
+touched":
+
+```
+80+          24/7          5.0          10
+Hours Saved  Uptime        Star Rating  Systems Shipped
+```
+
+"Systems Shipped" is the current portfolio count. This absorbs the small
+stat row that used to live inside the hero, the hero keeps its badge,
+headline, sub-copy, and CTAs only.
+
+## Approach Statement (new, round 4)
+
+A short, bold, centered philosophy statement in its own section between the
+Stat Bar and the Marquee, mirroring techjays' "We don't sell technology, we
+deliver outcomes" moment, but in MinCac's own words:
+
+**"We don't build automation for its own sake. We build the system that
+gets the busywork off your desk, permanently."**
+
+Small eyebrow above it: "Our Approach". No supporting image (no real
+photography to use honestly), set on the plain background with generous
+vertical padding so it reads as a deliberate pause in the page rather than
+another content section.
 
 ## Never say "free"
 
@@ -99,40 +157,79 @@ framing around it changes from a giveaway to a consultation ask:
   its next-steps copy swaps "build" language for "automation plan" /
   "consultation" language where it currently says "build."
 
-## Services (heaviest beew influence)
+## Services — rebuilt at capability altitude (round 4)
 
-Replace the 6-card grid with a numbered, hairline-divider list, matching
-beew's "01 / 02 / 03..." services pattern, same 6 services and copy, new
-presentation, each row an SVG line icon instead of an emoji, plus a new 7th
-service:
+Round 1-3 kept this as a tool-level list (Workflow Automation, Data
+Dashboards, Excel Automation...) styled as a beew-style numbered list.
+Round 4 explicitly drops that framing (your instruction: remove "Data
+Dashboards, Excel Automation, etc.") and rebuilds it at the same
+capability/outcome altitude as techjays' own list, using MinCac's real work,
+not techjays' category names verbatim. This also **absorbs the old separate
+"AI & LLM Solutions" section**, which was creating redundant AI-buzzword
+duplication between two sections lower on the page, likely part of what
+read as generic. There is now one unified 6-row list:
 
 ```
-01   Workflow Automation         n8n · Make · Zapier            [svg icon]
-02   Data Dashboards             Power BI · Tableau · Looker    [svg icon]
-03   Custom AI Tools             OpenAI · LangChain · RAG       [svg icon]
-04   CRM Automation              HubSpot · Salesforce           [svg icon]
-05   Excel Automation            VBA · Apps Script · Python     [svg icon]
-06   Data Pipeline Engineering   PostgreSQL · Snowflake · dbt   [svg icon]
-07   Lead Generation & Enrichment  Lead Sourcing · Enrichment · Outbound Infra  [svg icon]
+01  Workflow & Process Automation
+02  Data Intelligence
+03  Custom AI Agents & RAG
+04  AI-Powered Workflows
+05  Computer Vision
+06  Lead Generation & Enrichment
 ```
 
-Large index number (mono font, dim), service name (Sora, bold), one-line
-description, tool tags trailing right, thin `var(--border)` divider between
-rows, no card background/border.
+Presentation, per row: index number (mono, dim), service name (Sora, bold),
+one-line description, then a row of light gray capability-phrase pill tags
+underneath (not brand/tool names, matching techjays' abstraction level), and
+a small muted abstract line-art graphic at the row's right edge instead of
+a colored icon-in-circle chip. Thin `var(--border)` divider between rows.
 
-**07, new:** "Lead Generation & Enrichment" — sourcing and enriching
-targeted lead lists, then automating the SDR workflow around them (outbound
-sequencing, follow-ups) and the outbound infrastructure itself (generating
-and configuring sender inboxes). Tags kept generic ("Lead Sourcing ·
-Enrichment · Outbound Infra") rather than naming specific tools/platforms
-(Apollo, Clay, Instantly, Sales Navigator, etc. weren't confirmed), swap in
-the real ones once you confirm which to credit.
+**01 Workflow & Process Automation** (merges the old Workflow Automation +
+CRM Automation) — end-to-end automation across your stack and your CRM,
+from lead capture to invoice generation, follow-ups and hygiene included.
+Tags: `Cross-Platform Sync`, `CRM Hygiene`, `Follow-Up Automation`
+
+**02 Data Intelligence** (merges the old Data Dashboards + Data Pipeline
+Engineering) — real-time dashboards and the pipelines behind them, every
+metric live, no more waiting on a report.
+Tags: `Real-Time Dashboards`, `Automated Reporting`, `Data Pipelines`
+
+**03 Custom AI Agents & RAG** (merges the old Custom AI Tools service with
+the old Custom GPTs/RAG Systems cards) — purpose-built AI agents and
+retrieval systems trained on your SOPs and documents, answering questions
+like your best employee.
+Tags: `Internal Q&A Bots`, `Sales Copilots`, `Document Search`,
+`Brief → Spec Automation` (see note below)
+
+**04 AI-Powered Workflows** (the old AI-Powered Workflows + Fine-Tuning &
+Integration cards) — LLMs at the decision points in your workflow, triaging
+email, extracting invoice data, routing tasks without a human in the loop.
+Tags: `Email Triage`, `Invoice Processing`, `Model Integration`
+
+**05 Computer Vision** (unchanged content from round 2) — object detection,
+OCR/document extraction, and visual quality inspection built on your own
+footage or images.
+Tags: `Object Detection`, `OCR & Document Extraction`, `Visual Inspection`
+
+**06 Lead Generation & Enrichment** (unchanged content from round 3, stays
+its own row rather than getting folded in, it's a real differentiator tied
+to an actual case study) — sourced and enriched targeted lead lists, then
+automated the SDR workflow around them and the outbound infrastructure
+itself.
+Tags: `Lead Sourcing`, `Enrichment`, `Outbound Infra`
+
+"Brief → Spec Automation" references the "brief to spec" skill from your
+message, still unverified in this session (see Open items), inferred label
+pending your confirmation. Excel Automation is dropped per your explicit
+instruction. "VBA," "Apps Script," and other tool/vendor names no longer
+appear on this list, capability pills replace them throughout, matching
+techjays' more enterprise/premium abstraction level.
 
 ## Team
 
-New section, placed after Services and before AI/LLM Solutions. Three
-initials-avatar cards (same visual language as the existing testimonial
-avatars) with name, role, and LinkedIn link:
+New section (round 2), placed after Services. Three initials-avatar cards
+(same visual language as the existing testimonial avatars) with name, role,
+and LinkedIn link:
 
 - **Founding Engineer** — linkedin.com/in/mfbadev
 - **Managing Partner** — linkedin.com/in/taha12
@@ -141,23 +238,14 @@ avatars) with name, role, and LinkedIn link:
 This is also where the existing unused `team-photo.png` asset gets used
 (group photo alongside or behind the three cards).
 
-## AI & LLM Solutions — adds Computer Vision
+## AI & LLM Solutions — removed as a standalone section (round 4)
 
-The existing 4 cards (Custom GPTs & AI Agents, RAG Systems, AI-Powered
-Workflows, Fine-Tuning & Integration) stay as-is, plus a 5th:
-
-**Computer Vision** — object detection, OCR/document extraction, and visual
-quality inspection built on your own footage or images. Use-case tags:
-`Object Detection`, `OCR & Document Extraction`, `Visual Inspection`.
-
-"Etc" in the brief is scoped to Computer Vision only for now, more
-capabilities can be added once named.
-
-**Custom GPTs & AI Agents card gets a 4th use-case tag**: `Brief → Spec
-Automation`, referencing the "brief to spec" skill mentioned in the brief.
-This session couldn't find or verify that skill (checked this session's
-skill library, it isn't there), so the tag is inferred from its name alone,
-confirm or correct what it actually does before this goes live.
+This section (round 1-3: Custom GPTs & AI Agents, RAG Systems, AI-Powered
+Workflows, Fine-Tuning & Integration, plus Computer Vision added in round
+2) is gone as its own section. Its content now lives inside the unified
+Services list above (rows 03-05), removing the redundant AI-buzzword
+duplication between two separate sections that was part of what read as
+generic/templated.
 
 ## Portfolio ("Our Work") — 10 cards, now a slider
 
@@ -326,4 +414,11 @@ than rewriting everything blind.
    couldn't be found in this session to verify.
 8. Screenshots of the techjays.com copy/sections you specifically like, so
    the writing pass can be matched to them directly rather than a general
-   tightening guess.
+   tightening guess. (Partially addressed: round 4 got structural/visual
+   screenshots, still no specific copy call-outs.)
+9. Real photography, if you have any (team at work, office), so the hero
+   can use a real image instead of the CSS-only treatment.
+10. Confirm the new 6-row Services structure (merging Services with the old
+    AI/LLM section, dropping tool-brand tags for capability pills) actually
+    matches how you want MinCac positioned, this is the biggest content
+    judgment call in round 4.
