@@ -469,3 +469,38 @@ than rewriting everything blind.
     AI/LLM section, dropping tool-brand tags for capability pills) actually
     matches how you want MinCac positioned, this is the biggest content
     judgment call in round 4.
+
+## Round 7 — shipped to index.html
+
+Your reply after six rounds of Artifact review was "Continue," read as
+sign-off to move from the Artifact-review loop into the real implementation
+step. `index.html` and `audit/index.html` now match the round-6 Artifact:
+light-default theme with the hero and nav frozen dark, new hero copy and
+dot pattern, Stat Bar, Services rebuilt as the 6-row capability list, the
+two-column Approach Statement after Services, Team section (using
+`team-photo.png`), Institutions strip, Industries nav dropdown, Fit Check
+section and the Quote Estimation Calculator nav button removed, every
+Calendly link fixed to `tahaiftikhar1991`, the portfolio grid as a 10-card
+right-to-left slider (6 real screenshots plus 4 new placeholder cards),
+testimonials as a left-to-right slider, the "Free Build" form reframed to
+the "Let's Talk" consultation section with its original validation/submit
+logic intact, and the theme toggle, Industries dropdown, and both slider
+tracks wired up in JS. The Artifact's review-only scaffolding (preview
+ribbon, dashed review-note boxes) didn't ship, obviously.
+
+Verified locally with a headless browser: nav (desktop and mobile,
+including the Industries submenu on both), the theme toggle, both sliders,
+the consultation form's validation path, and the chat widget. One real bug
+turned up and got fixed in the process: the mobile Industries submenu
+inherited the desktop dropdown's `transform: translateX(-50%)` (a
+higher-specificity selector than the mobile override), which pushed the
+whole submenu off-screen to the left, invisible, on phones. Also swept the
+file for leftover em dashes, `#fit` references, emoji, and stale Calendly
+links, all clean.
+
+Open items 1, 2, 3, 6, 7, and 9 above are still genuinely open (real
+portfolio screenshots, real NUST/IBA logos, real draft-testimonial
+attribution, lead-gen tool credits, brief-to-spec confirmation, real
+photography), items 4-5 and 10 were effectively settled by rounds 3-6's
+review and this implementation pass; item 8 (techjays copy screenshots) got
+partially addressed in round 4 and folded into the copy throughout.
