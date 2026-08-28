@@ -229,7 +229,8 @@ body {
 .inst-strip .container { text-align: center; }
 .inst-strip .section-label { margin-bottom: 24px; }
 .inst-logos { display: flex; align-items: center; justify-content: center; gap: 56px; flex-wrap: wrap; }
-.inst-logo { font-family: var(--font-heading); font-weight: 700; font-size: 22px; color: var(--text-muted); letter-spacing: 1px; }
+.inst-logo-img { height: 44px; width: auto; max-width: 150px; object-fit: contain; filter: grayscale(1); opacity: 0.65; transition: filter 0.3s, opacity 0.3s; }
+.inst-logo-img:hover { filter: grayscale(0); opacity: 1; }
 
 /* ===== PROBLEM ===== */
 .problem { background: var(--bg-primary); }
@@ -671,9 +672,10 @@ body {
   <div class="container">
     <span class="section-label reveal" style="text-align:center;">Institutions We've Worked With</span>
     <div class="inst-logos reveal">
-      <span class="inst-logo">NUST</span>
-      <span class="inst-logo">IBA</span>
-      <span class="inst-logo">DMCR</span>
+      <img class="inst-logo-img" src="NUST%20logo.png" alt="NUST" loading="lazy">
+      <img class="inst-logo-img" src="IBA%20Logo.png" alt="IBA" loading="lazy">
+      <img class="inst-logo-img" src="BNU%20logo.png" alt="BNU" loading="lazy">
+      <img class="inst-logo-img" src="DMCR%20logo.png" alt="DMCR" loading="lazy">
     </div>
   </div>
 </div>
