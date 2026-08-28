@@ -376,6 +376,47 @@ else "I" shows up as the site's voice.
 - Copyright line
 - Marquee tool strip content (icons removed, see Design direction)
 
+## Round 5 — light by default, hero copy, dot pattern, Industries dropdown
+
+Direct feedback on the round 4 artifact: "that services structure works,
+keep it. the reviews and portfolio look good" (no changes there), "I dont
+want the black theme anymore, looks really unprofessional," the hero
+headline/subhead read as "very mehh nothing impressive," a request for the
+dot pattern from a reference screenshot, and an "Industries" nav dropdown
+like techjays'.
+
+**On the tech stack worry** ("Idk if all of this is even possible in html,
+go in node.js or next.js"): everything asked for here, dropdowns, dot
+patterns, sliders, theme toggles, is plain CSS and vanilla JavaScript. None
+of it needs a framework or rewrite. Moving to Next.js would mean new build
+tooling, a new hosting setup, and weeks of migration for zero visual
+difference, not something to take on for this.
+
+- **Light is now the default theme everywhere**, ignoring OS dark-mode
+  preference (the earlier `prefers-color-scheme` auto-detection is
+  removed, a deliberate choice given "I don't want the black theme
+  anymore" was unambiguous). The dark/light toggle from round 2 still
+  exists for anyone who wants dark, it's just no longer what greets a
+  first-time visitor.
+- **Hero and nav are the one deliberate exception**, frozen permanently
+  dark regardless of the toggle, matching techjays' own pattern (their
+  hero is a dark photo, their content sections below are white). This
+  keeps the dramatic "moment" the mesh gradient and grain were built for
+  in round 4, without the rest of the site reading as "black theme."
+- **New hero headline and subhead**, the old sentence-length copy read
+  flat: **"Automation that never sleeps."** / "AI agents and workflows that
+  answer every call, book every appointment, and sync to your CRM. Live in
+  5 to 7 days, running 24/7." ("Live in 5 to 7 days" is real copy already
+  on the current live site's meta description, not a new claim.)
+- **Halftone dot-grid pattern** added to the hero, layered over the mesh
+  gradient, masked so it concentrates toward one side rather than covering
+  the whole hero uniformly, matching the reference screenshot.
+- **Industries dropdown in the nav**, hover (and tap, for touch devices)
+  reveals the 8 industries as a two-column panel, each linking to the
+  existing Industries section further down the page (there aren't
+  separate per-industry pages on a single-page site, so this deep-links to
+  the same section rather than fragmenting into subpages).
+
 ## Copy direction: techjays.com
 
 You named techjays.com as a close competitor whose copy you like and want
