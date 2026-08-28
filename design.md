@@ -582,3 +582,26 @@ Updated open-items list (supersedes the previous one):
 2. Real logo files still needed: NUST, IBA, DMCR.
 3. Pupproven's project description and any real metrics, still nothing
    confirmed for it beyond the name.
+
+## Round 10 — real institution logos land, all four wired in
+
+Another proper upload via "Add file → Upload files" (commit `57e7040` on
+`main`) landed `NUST logo.png`, `IBA Logo.png`, `DMCR logo.png`, and a
+new one not previously scoped anywhere in this project, `BNU logo.png`
+(Beaconhouse National University). Confirmed via AskUserQuestion that BNU
+should join the strip as a fourth institution, same footing as the other
+three.
+
+Replaced all three text wordmarks with the real logo images
+(`81c8001`). The four logos have very different aspect ratios and brand
+colors (NUST's blue circular seal, IBA's maroon square mark, BNU's black
+line art, DMCR's teal/gray wordmark), so they're shown at a fixed height,
+in grayscale by default with a hover-to-color reveal, for a clean, unified
+"trusted by" strip instead of four clashing brand colors side by side.
+
+Updated open-items list (supersedes the previous one):
+1. Real screenshots still needed: Approvent, Augmented Squad, plus
+   pupproven once its project details are known.
+2. Institution logos: done, all four real.
+3. Pupproven's project description and any real metrics, still nothing
+   confirmed for it beyond the name.
