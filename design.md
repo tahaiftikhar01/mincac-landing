@@ -535,7 +535,12 @@ Updated open-items list (supersedes items 1 and 2 above):
 1. Real screenshots, as actual uploaded binaries: Scoop Plus (skoopless),
    Approvent, Navo, Augmented Squad, plus pupproven once its project
    details are known.
-2. Real logo files, as actual uploaded binaries: NUST, IBA, DMCR (three
-   now, not two).
+2. Real logo files, as actual uploaded binaries: NUST, IBA, DMCR.
 3. Pupproven's project description, MinCac's actual work on it, any real
    metrics, for its portfolio card copy.
+
+**Shipped from this round**: added `DMCR` as a third text wordmark next to
+NUST and IBA in the `.inst-strip` section, that part didn't need a real
+image file, matches the existing NUST/IBA styling. Still a placeholder
+wordmark, not a real logo, item 2 above still stands, now for the logo
+files themselves rather than the missing third entry.
