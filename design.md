@@ -504,3 +504,38 @@ attribution, lead-gen tool credits, brief-to-spec confirmation, real
 photography), items 4-5 and 10 were effectively settled by rounds 3-6's
 review and this implementation pass; item 8 (techjays copy screenshots) got
 partially addressed in round 4 and folded into the copy throughout.
+
+## Round 8 — first image upload attempt, none usable yet
+
+You pushed 4 "thumbnail.png" files and 3 "logo.md" files to `main`
+(`skoopless-thumbnail.png`, `navo-thumbnail.png`,
+`golden-artist-colors-thumbnail.png`, `pupproven-thumbnail.png`,
+`IBA.md`, `Nust logo.md`, `DMCR logo.md`). None of the 7 contain real
+image data, GitHub's "Create new file" editor doesn't commit a pasted
+image, it commits a markdown `<img>` tag pointing at a
+`github.com/user-attachments/assets/...` CDN link (one, `pupproven`,
+didn't even finish uploading before the file was saved). This session's
+network policy blocks that CDN domain outright, so those links aren't
+fetchable from here either way. Real fix: re-upload via "Add file →
+Upload files" on the repo's file browser, that path commits the actual
+binary.
+
+Confirmed via AskUserQuestion while sorting out the filenames:
+- `skoopless-thumbnail` is the **Scoop Plus** portfolio screenshot.
+- `DMCR` is a **third institution logo**, alongside NUST and IBA (needs
+  the actual logo file, plus institution strip CSS currently only
+  supports the two text wordmarks, will need updating for 3 logos as
+  real image files, sizing included).
+- `pupproven` is a **new, 11th portfolio case study**, not previously
+  scoped anywhere in this project. Still need: what MinCac actually built
+  for it, and any real metrics/description, alongside the real screenshot.
+- **Golden Artist stays skipped**, confirmed again, not going on the site.
+
+Updated open-items list (supersedes items 1 and 2 above):
+1. Real screenshots, as actual uploaded binaries: Scoop Plus (skoopless),
+   Approvent, Navo, Augmented Squad, plus pupproven once its project
+   details are known.
+2. Real logo files, as actual uploaded binaries: NUST, IBA, DMCR (three
+   now, not two).
+3. Pupproven's project description, MinCac's actual work on it, any real
+   metrics, for its portfolio card copy.
