@@ -109,19 +109,25 @@ Hours Saved  Uptime        Star Rating  Systems Shipped
 stat row that used to live inside the hero, the hero keeps its badge,
 headline, sub-copy, and CTAs only.
 
-## Approach Statement (new, round 4)
+## Approach Statement (round 6: two-column, moved after Services)
 
-A short, bold, centered philosophy statement in its own section between the
-Stat Bar and the Marquee, mirroring techjays' "We don't sell technology, we
-deliver outcomes" moment, but in MinCac's own words:
+Round 4 had this as a short centered statement between the Stat Bar and the
+Marquee. Round 6 replaces that with a two-column layout matching a
+screenshot the user sent of techjays' own second statement section
+("BUILT FOR YOUR CONTEXT"), moved to sit right after the Services section
+(where techjays places their equivalent, directly following their numbered
+capability list):
 
-**"We don't build automation for its own sake. We build the system that
-gets the busywork off your desk, permanently."**
+- Left column: small square-bullet eyebrow ("■ Our Approach") above a bold
+  headline: **"Built around how your business actually runs, not a
+  template."**
+- Right column: two short supporting paragraphs, MinCac's own words (not
+  techjays' sentences): opens with a "no two operations run the same way"
+  framing, explains the approach (scope properly, build it right, hand
+  over documentation the client's team can extend).
 
-Small eyebrow above it: "Our Approach". No supporting image (no real
-photography to use honestly), set on the plain background with generous
-vertical padding so it reads as a deliberate pause in the page rather than
-another content section.
+Plain background (`--bg-primary`), no card or border, generous padding,
+matching the reference's restraint.
 
 ## Never say "free"
 
