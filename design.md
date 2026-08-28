@@ -103,20 +103,30 @@ framing around it changes from a giveaway to a consultation ask:
 
 Replace the 6-card grid with a numbered, hairline-divider list, matching
 beew's "01 / 02 / 03..." services pattern, same 6 services and copy, new
-presentation, each row an SVG line icon instead of an emoji:
+presentation, each row an SVG line icon instead of an emoji, plus a new 7th
+service:
 
 ```
-01   Workflow Automation         n8n · Make · Zapier           [svg icon]
+01   Workflow Automation         n8n · Make · Zapier            [svg icon]
 02   Data Dashboards             Power BI · Tableau · Looker    [svg icon]
 03   Custom AI Tools             OpenAI · LangChain · RAG       [svg icon]
 04   CRM Automation              HubSpot · Salesforce           [svg icon]
 05   Excel Automation            VBA · Apps Script · Python     [svg icon]
 06   Data Pipeline Engineering   PostgreSQL · Snowflake · dbt   [svg icon]
+07   Lead Generation & Enrichment  Lead Sourcing · Enrichment · Outbound Infra  [svg icon]
 ```
 
 Large index number (mono font, dim), service name (Sora, bold), one-line
 description, tool tags trailing right, thin `var(--border)` divider between
 rows, no card background/border.
+
+**07, new:** "Lead Generation & Enrichment" — sourcing and enriching
+targeted lead lists, then automating the SDR workflow around them (outbound
+sequencing, follow-ups) and the outbound infrastructure itself (generating
+and configuring sender inboxes). Tags kept generic ("Lead Sourcing ·
+Enrichment · Outbound Infra") rather than naming specific tools/platforms
+(Apollo, Clay, Instantly, Sales Navigator, etc. weren't confirmed), swap in
+the real ones once you confirm which to credit.
 
 ## Team
 
@@ -143,7 +153,13 @@ quality inspection built on your own footage or images. Use-case tags:
 "Etc" in the brief is scoped to Computer Vision only for now, more
 capabilities can be added once named.
 
-## Portfolio ("Our Work") — 9 cards, now a slider
+**Custom GPTs & AI Agents card gets a 4th use-case tag**: `Brief → Spec
+Automation`, referencing the "brief to spec" skill mentioned in the brief.
+This session couldn't find or verify that skill (checked this session's
+skill library, it isn't there), so the tag is inferred from its name alone,
+confirm or correct what it actually does before this goes live.
+
+## Portfolio ("Our Work") — 10 cards, now a slider
 
 Keep the existing 6 cards exactly as they are (same images, copy, metrics).
 Append 3 new cards in the same `.portfolio-card` format:
@@ -168,10 +184,21 @@ Tag: `Data Dashboard`
 turns tariff research from a manual search into an instant answer."
 Metrics: `Instant` / Tariff Lookup, `Parts Database` / Core Feature
 
-**Pending from you (push to the repo):** real screenshots for all three.
-Placeholder cards use a clean solid brand-gradient panel with just the
-project name, no "pending" callout, no camera icon, reads as intentional
-rather than unfinished.
+**10. Lead Generation & Outbound Infrastructure — Augmented Squad**
+Tag: `Lead Generation`
+"Built and enriched lead lists, automated the SDR workflow around them, and
+generated and configured the outbound inboxes Augmented Squad (and MinCac
+itself) send from." This is the case study behind the existing Tauseef
+Rehman testimonial ("ran outbound campaigns using Sales Navigator"), which
+previously had no matching portfolio card.
+Metrics: `Multi-Company` / Inbox Infrastructure, `SDR` / Workflow Automated
+(qualitative, no invented numbers)
+
+**Pending from you (push to the repo):** real screenshots for Scoop Plus,
+Approvent, and Navo (card 10 doesn't need one, it's process/infrastructure
+work, uses the same clean placeholder treatment). Placeholder cards use a
+solid brand-gradient panel with just the project name, no "pending"
+callout, no camera icon, reads as intentional rather than unfinished.
 
 **Now a slider**, same auto-scroll/pause-on-hover mechanism as testimonials,
 moving **right to left** (testimonials move left to right, see below, this
@@ -261,6 +288,19 @@ else "I" shows up as the site's voice.
 - Copyright line
 - Marquee tool strip content (icons removed, see Design direction)
 
+## Copy direction: techjays.com
+
+You named techjays.com as a close competitor whose copy you like and want
+this site to move toward. Couldn't fetch it directly, blocked by this
+sandbox's network policy (same issue as beew.studio). Since reading a pasted
+screenshot doesn't need file access (only vision), the same route that
+worked for the beew.studio design reference works here for copy, paste
+screenshots of the techjays.com sections/copy you specifically like and this
+gets refined against them directly. In the meantime, this pass tightens
+copy generally toward shorter, more confident, outcome-led sentences,
+concrete verbs, less hedging, applied lightly across section intros rather
+than rewriting everything blind.
+
 ## Copy rules applied throughout
 
 - No em dashes in any new or touched copy, commas, periods, or parentheses
@@ -280,3 +320,10 @@ else "I" shows up as the site's voice.
 4. Pick a hero headline (A/B/C above, or a variant) during Artifact review.
 5. Confirm the "Book a Call" hero-primary interpretation is what you meant
    by "top instead of last page," this was inferred from a terse note.
+6. Which tools/platforms to credit on the new Lead Generation & Enrichment
+   service tag (Apollo, Clay, Instantly, Sales Navigator, something else).
+7. Confirm or correct what the "brief to spec" skill actually does, it
+   couldn't be found in this session to verify.
+8. Screenshots of the techjays.com copy/sections you specifically like, so
+   the writing pass can be matched to them directly rather than a general
+   tightening guess.
