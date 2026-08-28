@@ -544,3 +544,41 @@ NUST and IBA in the `.inst-strip` section, that part didn't need a real
 image file, matches the existing NUST/IBA styling. Still a placeholder
 wordmark, not a real logo, item 2 above still stands, now for the logo
 files themselves rather than the missing third entry.
+
+## Round 9 — real screenshots land, Scoop Plus and Navo wired in
+
+First upload attempt via GitHub's "Create new file" editor (round 8)
+produced text wrappers around a CDN link, not real images. The user tried
+again the same way for `navo-thumbnail.png` and it got worse, editing it
+through the web editor emptied it to 1 byte. Explained the actual
+mechanism (that editor can't carry binary content through any path,
+period) and walked through the correct one, "Add file → Upload files."
+
+That worked: commit `a99ccfe` added `golden-artist-colors-upwork-
+thumbnail.png`, `navo-upwork-thumbnail.png`, and `skoopless-upwork-
+thumbnail.png` as real 1600x1200 PNGs (confirmed with `file`, not just
+extension). Wired the Scoop Plus and Navo portfolio cards to their real
+screenshots (`f07f35e`), replacing the gradient placeholders. Both images
+are polished marketing thumbnails (big title, tagline, feature pills,
+layered app screenshot) rather than plain product screenshots, so a
+straight `object-fit: cover` crop was cutting through the title text.
+Added a `.thumb-crop` class (`object-position: center 60%`) that biases
+the crop toward the actual app screenshot instead, since the title is
+already repeated in the card's own `<h3>` right below the image.
+
+Also used the real copy visible in those thumbnails to sharpen both card
+descriptions in the previous round (`15ddaeb`): Scoop Plus is specifically
+a custom supplement *builder* (mix your own pre/post-workout blends, live
+nutrition facts and pricing), not just a generic ordering flow; Navo's
+dashboard rolls up duty exposure and landed cost from BOMs and import
+history.
+
+Golden Artist's thumbnail also arrived in that same upload but stays off
+the site, per the standing "skip it" decision, confirmed twice now.
+
+Updated open-items list (supersedes the previous one):
+1. Real screenshots still needed: Approvent, Augmented Squad, plus
+   pupproven once its project details are known.
+2. Real logo files still needed: NUST, IBA, DMCR.
+3. Pupproven's project description and any real metrics, still nothing
+   confirmed for it beyond the name.
