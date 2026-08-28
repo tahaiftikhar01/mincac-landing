@@ -605,3 +605,50 @@ Updated open-items list (supersedes the previous one):
 2. Institution logos: done, all four real.
 3. Pupproven's project description and any real metrics, still nothing
    confirmed for it beyond the name.
+
+## Round 11 — Augmented Squad logo, PupProven ships, Industries expands
+
+Another proper upload (commit `c4d218e` on `main`) landed the Augmented
+Squad brand logo and a completed `pupproven-upwork-thumbnail.png` (the
+earlier attempt never finished). Wired both in (`9eff18e`):
+
+- **Augmented Squad**: since this case study is services/outbound work,
+  not a built product UI, used the client logo on a plain white card
+  instead of the usual full-bleed screenshot crop. The uploaded logo
+  itself had a "transparency preview" checkerboard flattened into solid
+  opaque pixels (confirmed via alpha channel, uniformly 255, no real
+  transparency), an export artifact, not something that would disappear
+  in a browser. Thresholded the light checker tones to true white in
+  place before using it.
+- **PupProven**: shipped as an 11th portfolio card (previously confirmed
+  as "add it," not skipped). Real copy used from its own thumbnail: "Pet
+  Supplement Storefront," a subscription bundle-builder for a pet
+  supplement brand. Updated the "systems shipped" stat and work-section
+  copy from ten to eleven.
+
+Separately, the user pasted techjays.com's full site copy and said "we do
+everything that techjays does." Two of techjays' claims are business
+claims, not just copy, so checked both before touching anything:
+
+- **Outcome-based pricing** ("you pay for results, if we don't deliver
+  you don't pay"): confirmed this is **not** MinCac's actual model, free
+  scoping/consultation calls, but build work is paid regardless of
+  outcome. Not added, the current site already doesn't claim this.
+- **Industries list**: confirmed expand to match techjays even without
+  matching portfolio evidence, since this is a positioning choice, not a
+  claim about specific past client work. Added Manufacturing, Field
+  Services, Distribution & Logistics, Financial Services, and PE
+  Portfolio Companies (13 industries total now), in both the Industries
+  section grid and the nav dropdown (widened to 3 columns). New icons:
+  factory, truck, upward trend chart. `4c93101`.
+
+Still declining to copy techjays' own tagline ("The AI Reimagination
+Company") verbatim, consistent with the round-4 decision not to copy
+their proprietary positioning language, structural/stylistic inspiration
+only.
+
+Updated open-items list (supersedes the previous one):
+1. Real screenshots still needed: Approvent, plus pupproven's project
+   description would sharpen its card further (shipped with only the
+   thumbnail's own visible copy so far).
+2. That's it, everything else from prior rounds is done.
