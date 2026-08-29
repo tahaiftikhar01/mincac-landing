@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Automation for Distribution &amp; Logistics | MinCac</title>
+<meta name="description" content="MinCac builds AI systems for distributors and logistics companies: inventory sync, shipment dashboards, and exception alerting. Software only.">
+<link rel="icon" type="image/png" href="../mincac-logo-transparent.png">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-deep: #FAFAF9; --bg-primary: #F3F2EE; --bg-card: rgba(23,19,33,0.035); --bg-card-hover: rgba(23,19,33,0.06);
+  --bg-elevated: rgba(23,19,33,0.045); --purple: #7c63e0; --purple-dim: rgba(124,99,224,0.12); --teal: #00C79B;
+  --teal-ink: #00967A; --teal-dim: rgba(0,199,155,0.1); --text-primary: #171321; --text-secondary: rgba(23,19,33,0.66);
+  --text-muted: rgba(23,19,33,0.42); --border: rgba(23,19,33,0.1); --border-hover: rgba(124,99,224,0.32); --amber: #B8790A;
+  --font-heading: 'Sora', sans-serif; --font-body: 'Inter', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+}
+:root[data-theme="dark"] {
+  --bg-deep: #06010f; --bg-primary: #0a0613; --bg-card: rgba(255,255,255,0.03); --bg-card-hover: rgba(255,255,255,0.06);
+  --bg-elevated: rgba(255,255,255,0.05); --purple: #9b87f5; --purple-dim: rgba(155,135,245,0.15); --teal: #00E5B0;
+  --teal-ink: #00E5B0; --teal-dim: rgba(0,229,176,0.12); --text-primary: #f0eef6; --text-secondary: rgba(240,238,246,0.62);
+  --text-muted: rgba(240,238,246,0.36); --border: rgba(255,255,255,0.07); --border-hover: rgba(155,135,245,0.25); --amber: #FBBF24;
+}
+:root {
+  --hero-bg-deep: #06010f; --hero-text-primary: #f0eef6; --hero-text-secondary: rgba(240,238,246,0.7);
+  --hero-text-muted: rgba(240,238,246,0.4); --hero-border: rgba(255,255,255,0.1); --hero-card: rgba(255,255,255,0.06);
+  --hero-purple: #9b87f5; --hero-purple-dim: rgba(155,135,245,0.15); --hero-teal: #00E5B0; --hero-teal-dim: rgba(0,229,176,0.12);
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text-primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+.icon { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; position: relative; }
+.section-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--teal-ink); margin-bottom: 16px; display: block; }
+.section-title { font-family: var(--font-heading); font-size: clamp(30px, 4.6vw, 48px); font-weight: 700; line-height: 1.15; margin-bottom: 18px; text-wrap: balance; }
+.section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 600px; }
+.gradient-text { background: linear-gradient(135deg, var(--purple), var(--teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.center { text-align: center; } .center .section-sub { margin: 0 auto; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0; background: color-mix(in srgb, var(--hero-bg-deep) 75%, transparent); backdrop-filter: blur(20px); border-bottom: 1px solid var(--hero-border); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.nav-logo { height: 34px; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links > li { position: relative; }
+.nav-links a, .nav-links .dropdown-trigger { color: var(--hero-text-secondary); text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.nav-links a:hover, .nav-links .dropdown-trigger:hover { color: var(--hero-text-primary); }
+.nav-links .chevron { width: 11px; height: 11px; stroke-width: 2.2; transition: transform 0.2s; }
+.nav-links li.has-dropdown:hover .chevron, .nav-links li.has-dropdown.open .chevron { transform: rotate(180deg); }
+.nav-dropdown-panel { position: absolute; top: calc(100% + 18px); left: 50%; transform: translateX(-50%) translateY(-8px); background: var(--hero-bg-deep); border: 1px solid var(--hero-border); border-radius: 14px; padding: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; width: 520px; opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+.nav-links li.has-dropdown:hover .nav-dropdown-panel, .nav-links li.has-dropdown.open .nav-dropdown-panel { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.nav-dropdown-panel a { display: block; padding: 10px 12px; border-radius: 8px; color: var(--hero-text-secondary); font-size: 13px; }
+.nav-dropdown-panel a:hover { background: var(--hero-card); color: var(--hero-text-primary); }
+.nav-dropdown-panel a.current { color: var(--hero-teal); }
+.nav-right { display: flex; align-items: center; gap: 14px; }
+.theme-toggle { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--hero-border); background: var(--hero-card); color: var(--hero-text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.theme-toggle:hover { color: var(--hero-text-primary); border-color: var(--hero-purple-dim); }
+.theme-toggle .icon { width: 18px; height: 18px; }
+.nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--hero-teal); border-radius: 8px; color: #06010f; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.3s; white-space: nowrap; }
+.nav-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.mobile-toggle { display: none; background: none; border: none; color: var(--hero-text-primary); cursor: pointer; padding: 4px; flex-shrink: 0; }
+.mobile-toggle .icon { width: 24px; height: 24px; }
+@media (max-width: 860px) {
+  .nav-links { display: none; } .mobile-toggle { display: flex; }
+  .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--hero-bg-deep); backdrop-filter: blur(20px); padding: 18px 24px 22px; border-bottom: 1px solid var(--hero-border); gap: 2px; max-height: calc(100vh - 68px); overflow-y: auto; }
+  .nav-links.open > li { width: 100%; }
+  .nav-links.open a, .nav-links.open .dropdown-trigger { padding: 12px 0; width: 100%; justify-content: space-between; border-top: 1px solid var(--hero-border); }
+  .nav-links.open > li:first-child > a { border-top: none; }
+  .nav-dropdown-panel { position: static; transform: none; opacity: 1; visibility: visible; display: none; width: 100%; grid-template-columns: 1fr; box-shadow: none; border: none; padding: 0 0 6px 14px; background: transparent; }
+  .nav-links li.has-dropdown:hover .nav-dropdown-panel, .nav-links li.has-dropdown.open .nav-dropdown-panel { display: grid; transform: none; }
+  .nav-dropdown-panel a { border-top: none; padding: 9px 0; width: auto; }
+}
+
+.hero { min-height: 60vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 118px 0 64px; background: var(--hero-bg-deep); }
+.hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 65% at 18% -10%, var(--hero-purple-dim) 0%, transparent 55%), radial-gradient(ellipse 75% 60% at 100% 15%, var(--hero-teal-dim) 0%, transparent 55%), linear-gradient(180deg, #06010f 0%, #0a0613 100%); }
+.hero-dots { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, rgba(240,238,246,0.5) 1px, transparent 1.6px); background-size: 8px 8px; mask-image: radial-gradient(ellipse 65% 55% at 78% 40%, black 15%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse 65% 55% at 78% 40%, black 15%, transparent 70%); }
+.hero-content { position: relative; z-index: 2; text-align: center; width: 100%; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; background: var(--hero-card); border-radius: 100px; font-family: var(--font-mono); font-size: 12px; color: var(--hero-teal); margin-bottom: 26px; backdrop-filter: blur(10px); }
+.hero-badge .dot { width: 6px; height: 6px; background: var(--hero-teal); border-radius: 50%; }
+.hero h1 { font-family: var(--font-heading); font-size: clamp(34px, 5.4vw, 58px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; text-wrap: balance; color: var(--hero-text-primary); }
+.hero h1 .highlight { background: linear-gradient(135deg, var(--hero-purple) 0%, var(--hero-teal) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-sub { font-size: clamp(15px, 1.6vw, 18px); color: var(--hero-text-secondary); line-height: 1.7; max-width: 620px; margin: 0 auto 34px; }
+.hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 15px 32px; background: linear-gradient(135deg, var(--hero-purple), #7c6ad4); border: none; border-radius: 100px; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 30px var(--hero-purple-dim); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--hero-purple-dim); }
+.btn-glass { display: inline-flex; align-items: center; gap: 10px; padding: 15px 32px; background: var(--hero-card); border: 1px solid var(--hero-border); border-radius: 100px; color: var(--hero-text-primary); font-size: 15px; text-decoration: none; transition: all 0.3s; }
+.btn-glass:hover { background: color-mix(in srgb, var(--hero-card) 200%, transparent); border-color: var(--hero-purple-dim); }
+
+.problem { background: var(--bg-primary); }
+.problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.problem-list { list-style: none; display: flex; flex-direction: column; }
+.problem-list li { display: flex; align-items: flex-start; gap: 16px; padding: 22px 4px; border-top: 1px solid var(--border); font-size: 14.5px; color: var(--text-secondary); line-height: 1.6; }
+.problem-list li:last-child { border-bottom: 1px solid var(--border); }
+.problem-list .icon-wrap { flex-shrink: 0; width: 22px; height: 22px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.problem-list .icon-wrap .icon { width: 18px; height: 18px; stroke-width: 1.4; }
+@media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+
+.ind-cap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 44px; }
+.ind-cap-card { padding: 32px 26px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; transition: border-color 0.3s; }
+.ind-cap-card:hover { border-color: var(--border-hover); }
+.ind-cap-card .cap-icon-wrap { width: 44px; height: 44px; border-radius: 12px; background: var(--purple-dim); color: var(--purple); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+.ind-cap-card h4 { font-family: var(--font-heading); font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.ind-cap-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
+@media (max-width: 860px) { .ind-cap-grid { grid-template-columns: 1fr; } }
+
+.stat-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-primary); }
+.ind-stats-note { text-align: center; padding: 20px 0 0; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.5px; color: var(--text-muted); }
+.stat-bar-inner { display: grid; grid-template-columns: repeat(3, 1fr); }
+.stat-bar-item { padding: 36px 24px 40px; text-align: center; border-left: 1px solid var(--border); }
+.stat-bar-item:first-child { border-left: none; }
+.stat-bar-num { font-family: var(--font-heading); font-size: clamp(24px, 3.2vw, 32px); font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 6px; }
+.stat-bar-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); }
+@media (max-width: 700px) { .stat-bar-inner { grid-template-columns: 1fr; } .stat-bar-item { border-left: none; border-top: 1px solid var(--border); } .stat-bar-item:first-child { border-top: none; } }
+
+.ind-scenario { background: var(--bg-deep); }
+.ind-scenario-box { max-width: 760px; margin: 0 auto; padding: 40px 44px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; border-left: 3px solid var(--teal); }
+.ind-scenario-label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-ink); margin-bottom: 14px; display: block; }
+.ind-scenario-box p { font-size: 15px; line-height: 1.85; color: var(--text-secondary); }
+
+.ind-faq { max-width: 760px; margin: 44px auto 0; display: flex; flex-direction: column; }
+.ind-faq details { border-bottom: 1px solid var(--border); padding: 20px 4px; }
+.ind-faq details:first-child { border-top: 1px solid var(--border); }
+.ind-faq summary { font-family: var(--font-heading); font-size: 15.5px; font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.ind-faq summary::-webkit-details-marker { display: none; }
+.ind-faq summary::after { content: '+'; font-size: 22px; color: var(--text-muted); flex-shrink: 0; line-height: 1; }
+.ind-faq details[open] summary::after { content: '\2212'; }
+.ind-faq p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-top: 12px; }
+
+.cta-section { text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--border); background: var(--bg-primary); }
+.cta-section .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--purple-dim) 0%, transparent 60%); }
+.cta-section .container { position: relative; z-index: 2; }
+
+.footer { padding: 44px 0; border-top: 1px solid var(--border); }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.footer-logo { height: 26px; opacity: 0.5; }
+.footer-links { display: flex; gap: 22px; list-style: none; }
+.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 12.5px; transition: color 0.2s; }
+.footer-links a:hover { color: var(--text-secondary); }
+.footer-copy { font-size: 11.5px; color: var(--text-muted); }
+
+@media (max-width: 560px) { .hero-ctas { flex-direction: column; align-items: center; } }
+
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+<defs>
+<symbol id="i-workflow" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.4"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><path d="M7.4 12h2.2M14.4 12h2.2"/></symbol>
+<symbol id="i-dashboard" viewBox="0 0 24 24"><path d="M4 20V12M10 20V7M16 20V3"/><path d="M2 20h20"/></symbol>
+<symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9 7V4M15 7V4M9 20v-3M15 20v-3M7 9H4M7 15H4M20 9h-3M20 15h-3"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/></symbol>
+<symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+</defs>
+</svg>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html"><img src="../mincac-logo-transparent.png" alt="Mincac" class="nav-logo"></a>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <svg class="icon" id="mobileToggleIcon"><use href="#i-menu"/></svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#work">Work</a></li>
+      <li class="has-dropdown" id="industriesDropdown">
+        <span class="dropdown-trigger">Industries <svg class="icon chevron" style="width:11px;height:11px;"><use href="#i-arrow" style="transform:rotate(90deg);transform-origin:center"/></svg></span>
+        <div class="nav-dropdown-panel">
+          <a href="clinics.html">Clinics</a>
+          <a href="law-firms.html">Law Firms</a>
+          <a href="e-commerce.html">E-Commerce</a>
+          <a href="marketing-agencies.html">Marketing Agencies</a>
+          <a href="construction.html">Construction</a>
+          <a href="b2b-saas.html">B2B SaaS</a>
+          <a href="real-estate.html">Real Estate</a>
+          <a href="consultants.html">Consultants</a>
+          <a href="manufacturing.html">Manufacturing</a>
+          <a href="field-services.html">Field Services</a>
+          <a href="distribution-logistics.html" class="current">Distribution &amp; Logistics</a>
+          <a href="financial-services.html">Financial Services</a>
+          <a href="pe-portfolio.html">PE Portfolio Companies</a>
+        </div>
+      </li>
+      <li><a href="../index.html#team">Team</a></li>
+      <li><a href="../index.html#problem">Problems</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark">
+        <svg class="icon" id="themeIcon"><use href="#i-moon"/></svg>
+      </button>
+      <a href="https://calendly.com/tahaiftikhar1991/30min" target="_blank" rel="noopener" class="nav-cta">Book a Call <svg class="icon" style="width:14px;height:14px;stroke:currentColor"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="container hero-content">
+    <div class="hero-badge reveal"><span class="dot"></span>AI for Distribution &amp; Logistics &middot; Software Only</div>
+    <h1 class="reveal">Inventory and shipment data <span class="highlight">in real time, everywhere.</span></h1>
+    <p class="hero-sub reveal">Inventory counts and shipment status scattered across warehouses, carriers, and spreadsheets slow every decision down. We build the software that unifies it.</p>
+    <div class="hero-ctas reveal">
+      <a href="https://calendly.com/tahaiftikhar1991/30min" target="_blank" rel="noopener" class="btn-primary">Book a Call <svg class="icon" style="width:15px;height:15px;stroke:#fff"><use href="#i-arrow"/></svg></a>
+      <a href="#ind-caps" class="btn-glass">See What We Build</a>
+    </div>
+  </div>
+</section>
+
+<section class="section problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div>
+        <span class="section-label reveal">The Problem</span>
+        <h2 class="section-title reveal">Nobody has <span class="gradient-text">one true count</span></h2>
+        <p class="section-sub reveal">Every manual stock check is time spent reconciling instead of shipping.</p>
+      </div>
+      <ul class="problem-list">
+        <li class="reveal"><span class="icon-wrap"><svg class="icon"><use href="#i-warning"/></svg></span><span>Inventory counts drift between warehouses, your WMS, and your storefront or order system.</span></li>
+        <li class="reveal"><span class="icon-wrap"><svg class="icon"><use href="#i-workflow"/></svg></span><span>Shipment status gets checked manually across multiple carrier portals, one tracking number at a time.</span></li>
+        <li class="reveal"><span class="icon-wrap"><svg class="icon"><use href="#i-dashboard"/></svg></span><span>Nobody has one live view of stock levels and shipment status across every location.</span></li>
+        <li class="reveal"><span class="icon-wrap"><svg class="icon"><use href="#i-doc"/></svg></span><span>Exception handling, delays, damage, returns, gets tracked in email instead of anywhere central.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ind-caps">
+  <div class="container">
+    <div class="center">
+      <span class="section-label reveal">What We'd Build</span>
+      <h2 class="section-title reveal">Three systems, one true count</h2>
+      <p class="section-sub reveal" style="margin:0 auto;">All software, all remote, nothing that requires anyone on-site.</p>
+    </div>
+    <div class="ind-cap-grid">
+      <div class="ind-cap-card reveal">
+        <div class="cap-icon-wrap"><svg class="icon"><use href="#i-workflow"/></svg></div>
+        <h4>Inventory Sync Automation</h4>
+        <p>Keeps stock levels in sync across warehouses, your WMS, and your order systems automatically, no manual reconciliation.</p>
+      </div>
+      <div class="ind-cap-card reveal">
+        <div class="cap-icon-wrap"><svg class="icon"><use href="#i-dashboard"/></svg></div>
+        <h4>Shipment &amp; Carrier Dashboards</h4>
+        <p>Real-time shipment tracking pulled from every carrier you use into one dashboard, instead of checking portals one at a time.</p>
+      </div>
+      <div class="ind-cap-card reveal">
+        <div class="cap-icon-wrap"><svg class="icon"><use href="#i-chip"/></svg></div>
+        <h4>Exception &amp; Delay Alerting</h4>
+        <p>Automated flagging of delays, damage claims, and exceptions the moment they happen, routed to the right person instead of sitting in an inbox.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stat-bar">
+  <div class="ind-stats-note">Illustrative example, not a specific client result</div>
+  <div class="container">
+    <div class="stat-bar-inner">
+      <div class="stat-bar-item reveal"><span class="stat-bar-num">Real-Time</span><span class="stat-bar-label">Inventory Sync, Every Location</span></div>
+      <div class="stat-bar-item reveal"><span class="stat-bar-num">One View</span><span class="stat-bar-label">Shipment Status, Every Carrier</span></div>
+      <div class="stat-bar-item reveal"><span class="stat-bar-num">Automated</span><span class="stat-bar-label">Exception &amp; Delay Alerts</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="section ind-scenario">
+  <div class="container">
+    <div class="center" style="margin-bottom:20px;">
+      <span class="section-label reveal">Example Scenario</span>
+      <h2 class="section-title reveal" style="max-width:640px;margin-left:auto;margin-right:auto;">What this could look like <span class="gradient-text">in practice</span></h2>
+    </div>
+    <div class="ind-scenario-box reveal">
+      <span class="ind-scenario-label">Illustrative, not an actual client</span>
+      <p>Picture a distributor running three warehouses and shipping through four carriers. Instead of checking each carrier's portal by hand, a live dashboard pulls every shipment's status into one view, and a delay past a set threshold flags itself automatically.</p>
+      <p style="margin-top:14px;">The exception that used to surface when a customer complained now surfaces the moment it happens.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="center">
+      <span class="section-label reveal">Frequently Asked</span>
+      <h2 class="section-title reveal">Questions distributors <span class="gradient-text">actually ask</span></h2>
+    </div>
+    <div class="ind-faq">
+      <details class="reveal"><summary>Can this integrate with our existing WMS and carriers?</summary><p>Yes, we build integrations against the systems and carriers you already use.</p></details>
+      <details class="reveal"><summary>Will this replace our warehouse staff?</summary><p>No, it keeps the data in sync so your team can act on it, physical warehouse operations stay with your team.</p></details>
+      <details class="reveal"><summary>How do you handle multiple warehouse locations?</summary><p>The sync and dashboards are built to unify data across as many locations as you run.</p></details>
+      <details class="reveal"><summary>How long does a typical build take?</summary><p>Most inventory-sync or shipment-dashboard builds are live in two to three weeks once we've scoped your systems.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="section cta-section">
+  <div class="cta-bg"></div>
+  <div class="container">
+    <h2 class="section-title reveal" style="max-width:600px;margin:0 auto 16px;">Ready for <span class="gradient-text">one true count</span>?</h2>
+    <p class="section-sub reveal" style="margin:0 auto 36px;text-align:center;">Book a 30-minute call. We'll map your inventory and shipment workflow and show you where automation fits.</p>
+    <div class="reveal" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://calendly.com/tahaiftikhar1991/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:16px;padding:18px 42px;">Book Your Strategy Call <svg class="icon" style="width:15px;height:15px;stroke:#fff"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <a href="../index.html"><img src="../mincac-logo-transparent.png" alt="Mincac" class="footer-logo"></a>
+      <ul class="footer-links">
+        <li><a href="mailto:hello@mincac.com">hello@mincac.com</a></li>
+        <li><a href="https://linkedin.com/company/mincac" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://calendly.com/tahaiftikhar1991/30min" target="_blank" rel="noopener">Book a Call</a></li>
+      </ul>
+      <span class="footer-copy">&copy; 2026 Mincac. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = localStorage.getItem('mincac-theme'); } catch(e) {}
+  if (stored === 'dark') root.setAttribute('data-theme', 'dark');
+  function isDark(){ return root.getAttribute('data-theme') === 'dark'; }
+  function updateIcon(){ document.getElementById('themeIcon').setAttribute('href', isDark() ? '#i-sun' : '#i-moon'); }
+  updateIcon();
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    if (isDark()) { root.removeAttribute('data-theme'); try { localStorage.setItem('mincac-theme', 'light'); } catch(e) {} }
+    else { root.setAttribute('data-theme', 'dark'); try { localStorage.setItem('mincac-theme', 'dark'); } catch(e) {} }
+    updateIcon();
+  });
+})();
+
+(function(){
+  var item = document.getElementById('industriesDropdown');
+  if (!item) return;
+  var trigger = item.querySelector('.dropdown-trigger');
+  trigger.addEventListener('click', function(e){ e.stopPropagation(); item.classList.toggle('open'); });
+  document.addEventListener('click', function(){ item.classList.remove('open'); });
+})();
+
+var mobileToggle = document.getElementById('mobileToggle');
+var navLinks = document.getElementById('navLinks');
+var mobileToggleIcon = document.getElementById('mobileToggleIcon');
+mobileToggle.addEventListener('click', function(){
+  var open = navLinks.classList.toggle('open');
+  mobileToggleIcon.setAttribute('href', open ? '#i-close' : '#i-menu');
+});
+document.querySelectorAll('.nav-links a').forEach(function(link){
+  link.addEventListener('click', function(){ navLinks.classList.remove('open'); mobileToggleIcon.setAttribute('href', '#i-menu'); });
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+  anchor.addEventListener('click', function(e){
+    var href = this.getAttribute('href');
+    if (!href || href.length < 2) return;
+    var target = document.querySelector(href);
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+var revealObserver = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){ if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+</script>
+
+</body>
+</html>
