@@ -652,3 +652,41 @@ Updated open-items list (supersedes the previous one):
    description would sharpen its card further (shipped with only the
    thumbnail's own visible copy so far).
 2. That's it, everything else from prior rounds is done.
+
+## Round 12 — institution logo transparency fix
+
+User reported the live NUST, IBA, BNU, and DMCR logos "are not coloured,
+and dont even have the transparent logo... dont blend into the Background."
+Diagnosed: all four PNGs had zero real alpha transparency (confirmed via
+`alpha.getextrema()` returning `(255, 255)`), with a flat near-white
+background baked into fully opaque pixels, the same class of export bug
+as the Augmented Squad logo fixed in Round 11, just not caught for these
+four at upload time.
+
+DMCR had a second, sneakier version of the same bug: a checkerboard
+"transparent" preview pattern from the design tool was flattened into
+literal opaque pixels, including inside enclosed shapes like the "D"
+counter, where a plain border-flood-fill can't reach it (the counter
+isn't connected to the image's outer edge). Fixed with a two-pass approach:
+a border-connected flood-fill for the real outer background, plus a
+second pass that finds connected components matching the checkerboard's
+two-color signature (roughly balanced mix of the two colors, not a
+solid fill) and clears those too, wherever they sit. This deliberately
+leaves NUST's white ring/lettering, IBA's white icon, and BNU's white
+accent lines untouched, since those are uniform solid fills, not
+alternating checker noise, verified pixel-by-pixel and via rendered
+comparisons on both the light and dark theme backgrounds.
+
+Also removed the `filter: grayscale(1); opacity: 0.65;` on
+`.inst-logo-img` (and its hover override) added back in Round 10, since
+that was actively fighting the "not coloured" complaint. Logos now show
+their real brand colors at all times, full opacity on hover.
+
+Note: BNU's own logo is solid black, so on the (non-default) dark theme
+toggle it reads faint against the dark strip. That's the real logo's own
+color, not a bug worth "fixing" by recoloring their mark.
+
+Pushed as `444d017` on a freshly-restarted `claude/mincac-revamp-xori1l`
+(PR #1 had already merged, so the branch was reset to `origin/main` first
+per the standard "treat a merged branch as done" rule, then this commit
+added on top).
