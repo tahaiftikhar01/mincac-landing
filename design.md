@@ -710,3 +710,62 @@ takes effect everywhere with no HTML changes. Removed the stray
 no-extension "Mincac logo" upload artifact now that its content lives in
 the proper file. Left `mincac-logo-web.png` and `audit/mincac-logo.png`
 (a separate avatar image) alone, out of scope for this swap.
+
+## Round 14 — Artifact approved, real implementation: testimonials, services, industry pages
+
+User said "Continue" after reviewing the updated Artifact (testimonials cleanup,
+Work-section n8n/MinCac removal, widened Services rows, Law Firms template).
+Same reading as Round 7's "Continue": approval to move from the Artifact
+review loop into real implementation. Applied everything to `index.html`
+directly:
+
+- **Testimonials**: removed the "Verified Upwork Review" / "LinkedIn
+  Recommendation" badges and all 5 generic review chips (rodrigoarajoei,
+  selizal, stanleyoltin, omerrehman) from both the primary and duplicate
+  slider sets. Renamed Tauseef Rehman &rarr; Augmented Squad (avatar "AG")
+  and Shayan Malik &rarr; Dial Zero, Authorized Meta Partner (avatar "DZ"),
+  keeping their exact quotes. Removed the now-dead `.testimonial-badge` and
+  `.review-chip` CSS.
+- **Work section**: removed the "MinCac Automation Audit Bot" (n8n) card
+  from both slider copies, dropping the portfolio count from 11 to 10.
+  Updated the stat bar ("11" &rarr; "10" Systems Shipped) and the section's
+  own copy ("Eleven systems" &rarr; "Ten systems") to match.
+- **Services widened** (the CVision-inspired capability breadth, in
+  MinCac's own words, no client or project named): Data Intelligence now
+  explicitly mentions legacy data modernization, Custom AI Agents &amp; RAG
+  now explicitly mentions voice and conversational agents (replacing the
+  never-confirmed "Brief &rarr; Spec Automation" tag), Lead Generation &amp;
+  Enrichment now explicitly mentions AI-driven outreach agents. Same
+  positioning move as the Round-11 Industries expansion: a capability claim,
+  not a specific client outcome.
+- **13 industry pages, for real**: built `industries/*.html` (clinics,
+  law-firms, e-commerce, marketing-agencies, construction, b2b-saas,
+  real-estate, consultants, manufacturing, field-services,
+  distribution-logistics, financial-services, pe-portfolio), each a
+  self-contained static page (matching the site's existing pattern of
+  `audit/index.html`, `scorecard.html`, `free-build.html` each carrying
+  their own trimmed CSS rather than importing a shared stylesheet). Every
+  page reuses the homepage's real nav (working theme toggle, industries
+  dropdown, mobile menu), the same dark frozen hero treatment, a 4-item
+  Problem list, 3 software-only Capability cards, an explicitly-labeled
+  "Illustrative example, not a specific client result" stat bar, an
+  explicitly-labeled "Illustrative, not an actual client" scenario box, a
+  4-item FAQ, a CTA linking straight to Calendly, and the real footer.
+  Every claim stays software/AI/data work only, no on-site or physical-work
+  claims anywhere (explicit FAQ answers on the physical-adjacent industries,
+  Construction/Manufacturing/Field Services, say so directly). Generated via
+  a small local Python templating script (not committed) to keep the 13
+  pages' shared chrome byte-identical and reduce copy-paste drift; the
+  per-page content itself is hand-written, not templated.
+- **Homepage wiring**: the nav's Industries dropdown and the homepage's own
+  Industries grid tiles (`industry-tile`, previously plain `<div>`s) now
+  link to their real page instead of the `#industries` anchor. `.industry-tile`
+  got `text-decoration:none; color:inherit; display:block;` to work as an
+  anchor.
+- **Verified**: served the site locally, clicked an Industries tile through
+  to its real page, toggled dark mode on an industry page (matches the
+  homepage's palette exactly), scrolled through stat bar / scenario / FAQ /
+  CTA / footer, confirmed the homepage's Services and Testimonials sections
+  render the updated copy correctly. Grepped for leftover em dashes, the old
+  n8n Automation Audit Bot references, and the stale "11"/"Eleven" stat
+  copy, all clean, across `index.html` and all 13 new pages.
