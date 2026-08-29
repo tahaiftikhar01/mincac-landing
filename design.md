@@ -690,3 +690,23 @@ Pushed as `444d017` on a freshly-restarted `claude/mincac-revamp-xori1l`
 (PR #1 had already merged, so the branch was reset to `origin/main` first
 per the standard "treat a merged branch as done" rule, then this commit
 added on top).
+
+## Round 13 — new brand mark
+
+User uploaded a new "Mincac logo" PNG directly to `main` via GitHub's
+Add file → Upload files flow (the correct method this time, confirmed a
+real 1.5MB binary with genuine alpha transparency, not the fake-checker
+bug seen in earlier rounds). It's a redesigned mark: a more dimensional
+teal/white "M" built from two overlapping shapes (one reading as a
+stylized pen nib), white "mincac" wordmark underneath, same white/teal
+palette family as the outgoing mark, meant for a dark background exactly
+like the one it replaces.
+
+Cropped its transparent margin and saved it in place as
+`mincac-logo-transparent.png`, the exact filename already referenced by
+the nav logo, footer logo, and favicon link on every page (`index.html`,
+`audit/index.html`, `scorecard.html`, `free-build.html`), so the swap
+takes effect everywhere with no HTML changes. Removed the stray
+no-extension "Mincac logo" upload artifact now that its content lives in
+the proper file. Left `mincac-logo-web.png` and `audit/mincac-logo.png`
+(a separate avatar image) alone, out of scope for this swap.
