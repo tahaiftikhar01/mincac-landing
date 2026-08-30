@@ -769,3 +769,13 @@ directly:
   render the updated copy correctly. Grepped for leftover em dashes, the old
   n8n Automation Audit Bot references, and the stale "11"/"Eleven" stat
   copy, all clean, across `index.html` and all 13 new pages.
+
+## Round 15 — Approvent removed
+
+Approvent's real screenshot never arrived across 4+ rounds of asking. User
+decided to drop it rather than keep waiting: removed the Approvent card
+(both slider copies) along with the now-dead `.portfolio-placeholder` CSS
+it was the only user of. Portfolio count updates from 10 to 9 (stat bar and
+the section's own "systems we've shipped" copy, "five of them brand new"
+now "four," since Approvent was one of the five). Open-items list is now
+empty, nothing else is waiting on a real asset.
