@@ -769,3 +769,36 @@ directly:
   render the updated copy correctly. Grepped for leftover em dashes, the old
   n8n Automation Audit Bot references, and the stale "11"/"Eleven" stat
   copy, all clean, across `index.html` and all 13 new pages.
+
+## Round 15 — Approvent removed
+
+Approvent's real screenshot never arrived across 4+ rounds of asking. User
+decided to drop it rather than keep waiting: removed the Approvent card
+(both slider copies) along with the now-dead `.portfolio-placeholder` CSS
+it was the only user of. Portfolio count updates from 10 to 9 (stat bar and
+the section's own "systems we've shipped" copy, "five of them brand new"
+now "four," since Approvent was one of the five). Open-items list is now
+empty, nothing else is waiting on a real asset.
+
+## Round 16 — homepage Problem section rewritten to match the industry pages' voice
+
+User compared the homepage's Problem section against the industry pages
+(screenshotted the PE Portfolio page's Problem section as the bar to hit)
+and said the homepage copy is "ALOT" worse. The old copy leaned on
+unlabeled, made-up-sounding dollar figures as a headline hook ("You're
+paying $60K+ salaries for copy-paste work," "you're paying $5K/month"),
+exactly the kind of unsubstantiated stat the whole project has otherwise
+been careful to avoid or label as illustrative. Rewrote it in the same
+voice as the industry pages: concrete, procedural "X happens because Y"
+sentences grounded in the kind of work MinCac's own portfolio actually
+demonstrates (unified reporting, lead/message response, data living in
+disconnected tools), no invented salary figures.
+
+New headline: "Your best people are doing what software should be doing."
+New sub: "Every manual report, re-entry, and missed follow-up is time
+that should be going into the work that actually moves the business."
+New 4 problem items: reports rebuilt by hand from multiple platforms,
+data stuck in tools that don't talk to each other, leads/messages sitting
+unanswered, follow-ups falling through the cracks. Same `.problem-list`
+markup and icons, just the copy and one icon swap (i-workflow replaces
+i-dollar on the second item, since the dollar-amount line is gone).
