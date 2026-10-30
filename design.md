@@ -802,3 +802,16 @@ data stuck in tools that don't talk to each other, leads/messages sitting
 unanswered, follow-ups falling through the cracks. Same `.problem-list`
 markup and icons, just the copy and one icon swap (i-workflow replaces
 i-dollar on the second item, since the dollar-amount line is gone).
+
+## Round 17 — Team section stock photo removed
+
+User flagged `team-photo.png` (used in the Team section next to the 3
+team-member cards) for removal: a ~20-person group photo with "mincac"
+logos composited onto the studio backdrop, clearly not MinCac's actual
+3-person team, and directly contradicts the section's own copy ("Three
+people, no hand-offs"). Removed the image and deleted the file from the
+repo (nothing else referenced it). Restructured `.team-wrap` from its old
+1fr/1.4fr photo-plus-list split into a plain 3-column grid of the existing
+`.team-card`s, dropped the now-unused `.team-cards` wrapper div and
+`.team-photo` CSS. Verified locally: three equal cards, no empty gap
+where the photo used to sit.
