@@ -19,6 +19,10 @@ form submissions, no emails sent.
 | 9. Score | Mincac rubric, one reason per point, confidence | `score.py` | free |
 | 10. Output | CSV per batch in `out/`, ledger in `data/seen.csv` so batches never repeat | `cli.py dedupe` | free |
 
+Firmographics overlay: `data/firmo.csv` (Clay company search by domain) feeds verified headcount, revenue bucket,
+owner names and hard exclusions into `qualify`. `data/excluded.csv` holds manual exclusions that must persist across
+batches. A revenue bucket of $5M+ excludes; a $1M-5M bucket scores 0 revenue points and is flagged.
+
 Paid enrichment runs last, on survivors only. That keeps credit spend at roughly a third of enriching everything up front.
 
 ## Why passive detection beats AI test calls
@@ -42,8 +46,9 @@ finds the surname.
 
 ```bash
 cd lead-agent
-python3 -m mincac_leads.cli dedupe out/batch2.csv
-python3 -m mincac_leads.cli fingerprint out/batch2.csv
+python3 -m mincac_leads.cli discover out/batch3.csv        # merge Maps exports in data/raw/, drop seen + franchises
+python3 -m mincac_leads.cli fingerprint out/batch3.csv     # 24 parallel workers, ~2 min per 300 sites
+python3 -m mincac_leads.cli qualify out/batch3.csv         # writes _qualified.csv and _excluded.csv with reasons
 VERIFIER_PROVIDER=millionverifier VERIFIER_API_KEY=... python3 -m mincac_leads.cli emails out/batch2.csv
 ```
 

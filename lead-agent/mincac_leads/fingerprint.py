@@ -62,15 +62,24 @@ AD_PIXELS = {
     "Google Guaranteed / LSA": r"google[ _-]?guaranteed|ads\.google\.com/local-services",
     "Nextdoor pixel": r"ads\.nextdoor\.com",
 }
-CLAIM_247 = re.compile(r"24\s*/\s*7|24\s*hours?|24-hour|around the clock|open 24", re.I)
+CLAIM_247 = re.compile(r"24\s*/\s*7|24\s*hours? a day|open 24|24[- ]hour (?:emergency|service|availability)|"
+                       r"around the clock|24 hours,? 7 days", re.I)
+INSTALL = re.compile(r"(?:roof|system|ac|a/c|air conditioner|air conditioning|furnace|heat pump|hvac|unit|equipment)s?\s+"
+                     r"(?:replacements?|installations?|installs?|replace)|(?:replacement|new) (?:roofs?|systems?|furnaces?|ac\b|"
+                     r"air conditioners?|heat pumps?)|re-?roof(?:ing)?|\binstallations?\b|\breplacements?\b", re.I)
+COMMERCIAL = re.compile(r"commercial|industrial", re.I)
+RESIDENTIAL = re.compile(r"residential|homeowner|your home|home ?owners", re.I)
+FOUNDED = re.compile(r"(?:since|established|est\.?|founded(?: in)?)\s+((?:19|20)\d{2})|(\d{1,2})\+?\s+years? (?:of )?(?:experience|in business|serving)", re.I)
+AD_ID = re.compile(r"AW-\d{6,}|fbq\(['\"]init['\"],\s*['\"](\d{8,})")
 LIVE_ANSWER = re.compile(r"(live|real) (person|human)s? answer|answering service|call center|never miss a call", re.I)
 HOURS = re.compile(
-    r"((?:mon(?:day)?|tue|wed|thu|fri|sat|sun)[a-z]*\.?\s*(?:-|–|to|through)?\s*"
-    r"(?:mon|tue|wed|thu|fri|sat|sun)?[a-z]*\.?\s*:?\s*\d{1,2}(?::\d{2})?\s*(?:am|a\.m\.|a)\s*"
-    r"(?:-|–|to)\s*\d{1,2}(?::\d{2})?\s*(?:pm|p\.m\.|p))", re.I)
+    r"((?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\.?"
+    r"(?:\s*(?:-|–|—|to|through|thru)\s*(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*\.?)?[\s,:]*"
+    r"\d{1,2}(?::\d{2})?\s*(?:am|a\.m\.|a)\s*(?:-|–|—|to)\s*\d{1,2}(?::\d{2})?\s*(?:pm|p\.m\.|p)\b)", re.I)
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-OWNER = re.compile(r"(?:owner|founder|president|ceo|proprietor)[,:\s-]+(?:is\s+)?([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)"
-                   r"|([A-Z][a-z]+\s[A-Z][a-z]+)[,\s-]+(?:owner|founder|president)", re.M)
+_NM = r"[A-Z][a-z]+(?:\s(?:Mc|Mac|O')?[A-Z][a-z]+)+"
+OWNER = re.compile(r"(?:owner|founder|president|ceo|proprietor)[,:\s-]+(?:is\s+)?(" + _NM + r")"
+                   r"|(" + _NM + r")[,\s-]+(?:owner|founder|president)", re.M)
 TEXT_US = re.compile(r"text us|sms:|text (?:or call|\(?\d{3})", re.I)
 
 
@@ -123,4 +132,9 @@ def fingerprint(url, extra_paths=("/about", "/about-us", "/contact", "/contact-u
         "hours_found": sorted({m.strip() for m in HOURS.findall(text)})[:6],
         "emails": emails[:10],
         "owner_mentions": owners[:5],
+        "install_evidence": " | ".join(sorted({m.group(0).lower() for m in INSTALL.finditer(text)})[:4]),
+        "commercial_only": bool(COMMERCIAL.search(text)) and not RESIDENTIAL.search(text),
+        "founded": next((m.group(0) for m in FOUNDED.finditer(text)), ""),
+        "ad_ids": sorted({m.group(0) if m.group(0).startswith("AW-") else "MetaPixel " + m.group(1)
+                          for m in AD_ID.finditer(raw)})[:4],
     }

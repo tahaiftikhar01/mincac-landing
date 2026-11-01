@@ -51,25 +51,99 @@ def precheck(name, url):
     return None
 
 
-def cmd_fingerprint(path):
-    rows = read(path)
-    for r in rows:
-        why = precheck(r.get("business_name"), r.get("website"))
-        if why:
-            r["precheck_exclude"] = why
+def _industry(cats):
+    c = " ".join(cats or []).lower()
+    first = (cats or [""])[0].lower()
+    if "roof" in first:
+        return "Roofing"
+    if any(k in first for k in ("hvac", "air conditioning", "heating", "furnace")):
+        return "HVAC"
+    if "roof" in c:
+        return "Roofing"
+    if any(k in c for k in ("hvac", "air conditioning contractor", "heating contractor")):
+        return "HVAC"
+    return None
+
+
+def cmd_discover(out_path, raw_glob="data/raw/*.json", min_reviews=15, max_reviews=160):
+    """Merge Maps search exports into a candidate CSV. Drops seen, franchise, suspect and off-trade rows."""
+    from .icp import TIMEZONES
+    seen_d, seen_p = set(), set()
+    if SEEN.exists():
+        for s in read(SEEN):
+            seen_d.add(s["domain"]); seen_p.add(s["phone"])
+    rows, dropped = [], {}
+    for f in sorted(ROOT.glob(raw_glob)):
+        try:
+            blocks = json.loads(f.read_text()).get("data", {}).get("alexandria", [])
+        except Exception:
             continue
-        fp = fingerprint.fingerprint(r["website"])
-        r["fp_chat_or_answering"] = ", ".join(fp["chat_or_answering_tools"]) or "none detected"
-        r["fp_booking"] = ", ".join(fp["booking_tools"]) or "none detected"
-        r["fp_ad_signals"] = ", ".join(fp["ad_and_lead_signals"]) or "none detected"
-        r["fp_claims_24_7"] = " | ".join(fp["claims_24_7"]) or "none"
-        r["fp_live_answering_claim"] = " | ".join(fp["claims_live_answering"]) or "none"
-        r["fp_hours"] = " | ".join(fp["hours_found"]) or "none found"
-        r["fp_emails"] = ", ".join(fp["emails"]) or "none found"
-        r["fp_owner_mentions"] = ", ".join(fp["owner_mentions"]) or "none found"
-        r["fp_pages"] = " ; ".join(fp["pages_read"])
-        r["fp_errors"] = " ; ".join(fp["errors"])
-        print(f"{r.get('business_name')}: chat={r['fp_chat_or_answering']} | ads={r['fp_ad_signals']}", file=sys.stderr)
+        for b in blocks:
+            for p in (b.get("data") or {}).get("results", []) or []:
+                name, site, phone = p.get("name"), p.get("website"), p.get("phone")
+                d, ph = domain_of(site), digits(phone)
+                rc = p.get("review_count") or 0
+                reason = None
+                if not site:
+                    reason = "no website"
+                elif not (min_reviews <= rc <= max_reviews):
+                    reason = "review count outside 15-160"
+                elif not _industry(p.get("categories")):
+                    reason = "not roofing/HVAC"
+                elif precheck(name, site):
+                    reason = precheck(name, site)
+                elif d in seen_d or (ph and ph in seen_p):
+                    reason = "duplicate"
+                if reason:
+                    dropped[reason] = dropped.get(reason, 0) + 1
+                    continue
+                seen_d.add(d); seen_p.add(ph)
+                addr = p.get("address") or ""
+                m = re.search(r",\s*([^,]+),\s*([A-Z]{2})\s*\d{5}", addr)
+                rows.append({
+                    "business_name": name, "website": re.sub(r"\?.*$", "", site), "phone": phone,
+                    "city_state": f"{m.group(1)}, {m.group(2)}" if m else addr,
+                    "time_zone": TIMEZONES.get(p.get("timezone"), p.get("timezone") or "unknown"),
+                    "industry": _industry(p.get("categories")), "google_rating": p.get("rating"),
+                    "google_reviews": rc, "feature_id": p.get("feature_id"), "maps_url": p.get("maps_url"),
+                })
+    write(out_path, rows)
+    print(f"{len(rows)} candidates; dropped {dropped}", file=sys.stderr)
+
+
+def _fp_row(r):
+    why = precheck(r.get("business_name"), r.get("website"))
+    if why:
+        r["precheck_exclude"] = why
+        return r
+    fp = fingerprint.fingerprint(r["website"])
+    r["fp_chat_or_answering"] = ", ".join(fp["chat_or_answering_tools"]) or "none detected"
+    r["fp_booking"] = ", ".join(fp["booking_tools"]) or "none detected"
+    r["fp_ad_signals"] = ", ".join(fp["ad_and_lead_signals"]) or "none detected"
+    r["fp_ad_ids"] = ", ".join(fp.get("ad_ids", [])) or ""
+    r["fp_claims_24_7"] = " | ".join(fp["claims_24_7"]) or "none"
+    r["fp_live_answering_claim"] = " | ".join(fp["claims_live_answering"]) or "none"
+    r["fp_text_us"] = "yes" if fp["text_us_option"] else "no"
+    r["fp_contact_form"] = "yes" if fp["contact_form"] else "no"
+    r["fp_hours"] = " | ".join(fp["hours_found"]) or "none found"
+    r["fp_emails"] = ", ".join(fp["emails"]) or "none found"
+    r["fp_owner_mentions"] = ", ".join(fp["owner_mentions"]) or "none found"
+    r["fp_install_evidence"] = fp.get("install_evidence", "")
+    r["fp_commercial_only"] = "yes" if fp.get("commercial_only") else "no"
+    r["fp_founded"] = fp.get("founded", "")
+    r["fp_pages"] = " ; ".join(fp["pages_read"])
+    r["fp_errors"] = " ; ".join(fp["errors"])
+    return r
+
+
+def cmd_fingerprint(path, workers=24):
+    from concurrent.futures import ThreadPoolExecutor
+    rows = read(path)
+    todo = [r for r in rows if not r.get("fp_pages")]
+    with ThreadPoolExecutor(workers) as ex:
+        for r in ex.map(_fp_row, todo):
+            print(f"{r.get('business_name')}: chat={r.get('fp_chat_or_answering')} | ads={r.get('fp_ad_signals')}",
+                  file=sys.stderr)
     write(path, rows)
 
 
@@ -128,11 +202,38 @@ def cmd_dedupe(path):
     print(f"{len(keep)} kept, {len(rows) - len(keep)} duplicates", file=sys.stderr)
 
 
+def cmd_qualify(path, reviews_map="data/raw/reviews_map.json"):
+    """Writes <batch>_qualified.csv (score >= MIN_SCORE) and <batch>_excluded.csv with reasons."""
+    from . import qualify
+    from .icp import MIN_SCORE
+    rows = read(path)
+    rmap = ROOT / reviews_map
+    ev = qualify.load_reviews(rmap) if rmap.exists() else {}
+    good, bad = [], []
+    for r in rows:
+        why = qualify.disqualify(r)
+        if why:
+            bad.append({"business_name": r["business_name"], "website": r.get("website"), "reason": why})
+            continue
+        q = qualify.build(r, ev)
+        if q["score"] < MIN_SCORE:
+            bad.append({"business_name": r["business_name"], "website": r.get("website"),
+                        "reason": f"score {q['score']} < {MIN_SCORE} ({q['score_breakdown']})"})
+        else:
+            good.append(q)
+    good.sort(key=lambda q: -q["score"])
+    stem = path[:-4] if path.endswith(".csv") else path
+    write(stem + "_qualified.csv", good)
+    write(stem + "_excluded.csv", bad)
+    c = {k: sum(1 for g in good if g["confidence"] == k) for k in ("high", "medium", "low")}
+    print(f"{len(good)} qualified, {len(bad)} excluded; confidence {c}", file=sys.stderr)
+
+
 def main():
-    if len(sys.argv) != 3 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe"}:
+    if len(sys.argv) < 3 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe", "discover", "qualify"}:
         print(__doc__)
         sys.exit(1)
-    globals()[f"cmd_{sys.argv[1]}"](sys.argv[2])
+    globals()[f"cmd_{sys.argv[1]}"](*sys.argv[2:])
 
 
 if __name__ == "__main__":

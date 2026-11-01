@@ -68,8 +68,26 @@ def _smtp_rcpt(host, addr, helo="verify.mincac.local", sender="postmaster@mincac
             pass
 
 
+_PORT25 = None
+
+
+def _port25_open():
+    global _PORT25
+    if _PORT25 is None:
+        try:
+            socket.create_connection(("gmail-smtp-in.l.google.com", 25), timeout=6).close()
+            _PORT25 = True
+        except OSError:
+            _PORT25 = False
+    return _PORT25
+
+
 def verify_smtp(addr):
     domain = addr.split("@")[1]
+    if not _port25_open():
+        hosts = mx_hosts(domain)
+        return {"status": "unverified_mx_ok" if hosts else "invalid", "reason": "port 25 blocked; MX " +
+                (hosts[0] if hosts else "missing"), "method": "dns", "mx": hosts[0] if hosts else None}
     hosts = mx_hosts(domain)
     if not hosts:
         return {"status": "invalid", "reason": "no MX", "method": "dns"}
