@@ -31,6 +31,8 @@ except ImportError:
 HERE = Path(__file__).resolve().parent
 URL = "https://places.googleapis.com/v1/places:searchText"
 KEY_RE = re.compile(r"^AIza[0-9A-Za-z_\-]{35}$")
+SERPER_RE = re.compile(r"^[0-9A-Za-z]{24,64}$")
+PROVIDER = "google"
 
 
 def read_clipboard():
@@ -53,30 +55,34 @@ def read_clipboard():
 
 
 def get_key(ask=False):
-    key = "" if ask else os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
-    src = "the GOOGLE_PLACES_API_KEY variable"
+    envname = "SERPER_API_KEY" if PROVIDER == "serper" else "GOOGLE_PLACES_API_KEY"
+    kre = SERPER_RE if PROVIDER == "serper" else KEY_RE
+    key = "" if ask else os.environ.get(envname, "").strip()
+    src = f"the {envname} variable"
     if ask:
         key = getpass.getpass("Paste the key and press Enter (input is hidden): ").strip().strip("\"'")
         src = "the hidden prompt"
     elif not key:
         key, src = read_clipboard(), "your clipboard"
-    if not KEY_RE.match(key) and sys.stdin.isatty():
-        print("The clipboard does not hold a Google API key (you may have copied a command since).")
+    if not kre.match(key) and sys.stdin.isatty():
+        print("The clipboard does not hold an API key (you may have copied a command since).")
         key = getpass.getpass("Copy the key again, paste it here and press Enter (input is hidden): ").strip().strip("\"'")
         src = "the hidden prompt"
     if not key:
         sys.exit("Nothing found. Copy your API key (Google Cloud > APIs & Services > Credentials > Show key), "
                  "then run this again.")
-    if not KEY_RE.match(key):
+    if not kre.match(key):
         why = []
-        if not key.startswith("AIza"):
+        if PROVIDER == "google" and not key.startswith("AIza"):
             why.append("it does not start with 'AIza'")
-        if len(key) != 39:
+        if PROVIDER == "google" and len(key) != 39:
             why.append(f"it is {len(key)} characters long (a Google API key is 39)")
+        if PROVIDER == "serper" and not 24 <= len(key) <= 64:
+            why.append(f"it is {len(key)} characters long (a Serper key is about 40 letters and numbers)")
         if re.search(r"\s", key):
             why.append("it contains spaces or line breaks (you may have copied more than the key)")
         sys.exit(f"The text in {src} does not look like a Google API key: " + "; ".join(why) +
-                 ".\nGo back to the Credentials page, click 'Show key', copy it again and re-run.")
+                 ".\nCopy the key again and re-run.")
     return key, src
 
 
@@ -180,35 +186,53 @@ def main():
     ap.add_argument("--check", action="store_true", help="validate the key only")
     ap.add_argument("--quick", action="store_true", help="40-request trial run")
     ap.add_argument("--diagnose", action="store_true", help="explain why Google rejects the key")
+    ap.add_argument("--provider", choices=["google", "serper"], default="google")
     ap.add_argument("--ask", action="store_true", help="ignore the clipboard and type/paste the key at a hidden prompt")
     ap.add_argument("--yes", action="store_true", help="skip confirmation")
     ap.add_argument("--max-requests", type=int, default=2500)
     ap.add_argument("--tiers", default="tier1,tier2,tier3")
     a = ap.parse_args()
+    global PROVIDER
+    PROVIDER = a.provider
 
     key, src = get_key(a.ask)
-    print(f"Read a key from {src} (AIza...{key[-4:]}). Testing it with Google...")
-    ok, msg = check_key(key)
-    print(("OK: " if ok else "FAILED: ") + msg)
-    if not ok or a.diagnose:
-        diagnose(key)
-    if not ok:
-        sys.exit(1)
+    if PROVIDER == "serper":
+        from_path = str(HERE)
+        sys.path.insert(0, from_path)
+        from mincac_leads import serper
+        print(f"Read a key from {src} (...{key[-4:]}). Testing it with Serper...")
+        ok, msg, credits = serper.check(key)
+        print(("OK: " if ok else "FAILED: ") + msg)
+        if ok and credits is not None:
+            print(f"Credits used by that test: {credits}")
+        if not ok:
+            sys.exit(1)
+    else:
+        print(f"Read a key from {src} (AIza...{key[-4:]}). Testing it with Google...")
+        ok, msg = check_key(key)
+        print(("OK: " if ok else "FAILED: ") + msg)
+        if not ok or a.diagnose:
+            diagnose(key)
+        if not ok:
+            sys.exit(1)
     if a.check:
         return
 
     n = 40 if a.quick else a.max_requests
-    cost = n * 0.032
-    print(f"\nPlan: up to {n} Places searches (about ${cost:.0f} at list price; Google's monthly free allowance "
-          f"may cover part), then check every website, then build the call list and email targets.")
+    if PROVIDER == "serper":
+        print(f"\nPlan: up to {n} Serper search requests (each uses Serper credits; the free signup credits are "
+              f"about 2,500), then check every website, then build the call list and email targets.")
+    else:
+        print(f"\nPlan: up to {n} Places searches (about ${n * 0.032:.0f} at list price), then check every website, "
+              f"then build the call list and email targets.")
     if not a.yes and input("Start? [y/N] ").strip().lower() != "y":
         sys.exit("Cancelled. Nothing was spent.")
 
     (HERE / "data" / "raw").mkdir(parents=True, exist_ok=True)
     (HERE / "out").mkdir(exist_ok=True)
-    env = {**os.environ, "GOOGLE_PLACES_API_KEY": key}
+    env = {**os.environ, "SERPER_API_KEY" if PROVIDER == "serper" else "GOOGLE_PLACES_API_KEY": key}
     run(["storms", "90"], env, "1/6 NOAA storm reports (hail and wind, last 90 days)")
-    run(["places", str(n), a.tiers], env, f"2/6 Google Places search (cap {n} requests)")
+    run(["serper" if PROVIDER == "serper" else "places", str(n), a.tiers], env, f"2/6 Maps search (cap {n} requests)")
     run(["candidates", "out/places_candidates.csv"], env, "3/6 Clean, de-duplicate, drop franchises")
     run(["fingerprint", "out/places_candidates.csv"], env, "4/6 Check each website for chat, 24/7, ads (slowest step)")
     run(["calllist", "out/places_candidates.csv", "out/call_list.csv"], env, "5/6 Build call list")

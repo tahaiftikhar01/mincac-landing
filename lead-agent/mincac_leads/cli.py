@@ -234,6 +234,11 @@ def cmd_places(max_requests="2500", tiers="tier1,tier2,tier3"):
     places.run(tuple(tiers.split(",")), int(max_requests))
 
 
+def cmd_serper(max_requests="2000", tiers="tier1,tier2,tier3"):
+    from . import serper
+    serper.run(tuple(tiers.split(",")), int(max_requests))
+
+
 def cmd_storms(days="90"):
     from . import storms
     print(len(storms.build(int(days))), "counties with storm reports")
@@ -255,7 +260,7 @@ def cmd_emailtargets(cands_path, out_path="out/email_targets.csv", n="4000"):
 
 
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe", "discover", "qualify", "places", "storms", "candidates", "calllist", "emailtargets"}:
+    if len(sys.argv) < 2 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe", "discover", "qualify", "places", "serper", "storms", "candidates", "calllist", "emailtargets"}:
         print(__doc__)
         sys.exit(1)
     globals()[f"cmd_{sys.argv[1]}"](*sys.argv[2:])
