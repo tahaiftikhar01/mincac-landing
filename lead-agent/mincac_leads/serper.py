@@ -26,12 +26,14 @@ ADDR = re.compile(r",\s*([^,]+),\s*([A-Z]{2})(?:\s+\d{5})?(?:,|$)")
 _county_cache = {}
 
 
-def _post(key, q, page):
-    r = requests.post(URL, json={"q": q, "page": page, "gl": "us", "hl": "en"}, timeout=30,
-                      headers={"X-API-KEY": key, "Content-Type": "application/json"})
+def _post(key, q, page, ll=None):
+    body = {"q": q, "page": page, "gl": "us", "hl": "en"}
+    if ll:
+        body["ll"] = ll  # pages after the first require GPS, e.g. "@41.25,-96.0,12z"
+    r = requests.post(URL, json=body, timeout=30, headers={"X-API-KEY": key, "Content-Type": "application/json"})
     if r.status_code == 429:
         time.sleep(5)
-        return _post(key, q, page)
+        return _post(key, q, page, ll)
     return r
 
 
@@ -117,27 +119,36 @@ def run(tiers=("tier1", "tier2", "tier3"), max_requests=2000, pages=3):
                         text = q.format(city=city, st=st)
                         if text in done:
                             continue
-                        new, got_any = [], False
+                        new, ll = [], None
                         for page in range(1, pages + 1):
                             if used >= max_requests:
                                 print(f"request budget {max_requests} reached; {len(seen)} places stored")
                                 return
-                            r = _post(key, text, page)
+                            r = _post(key, text, page, ll)
                             used += 1
                             if r.status_code != 200:
+                                if page > 1 and r.status_code == 400:
+                                    break  # no further pages for this query
                                 raise SystemExit(f"Serper error {r.status_code}: {r.text[:200]}. "
                                                  f"Progress is saved; re-run to resume.")
                             places = r.json().get("places", [])
                             if not places:
                                 break
-                            got_any = True
+                            if ll is None:
+                                pts = [(x["latitude"], x["longitude"]) for x in places
+                                       if x.get("latitude") is not None and x.get("longitude") is not None]
+                                if pts:
+                                    ll = "@%.6f,%.6f,12z" % (sum(a for a, _ in pts) / len(pts),
+                                                             sum(b for _, b in pts) / len(pts))
+                            added = 0
                             for p in places:
                                 rec = _convert(p, ind, tier, text)
                                 if rec and rec["id"] not in seen:
                                     seen.add(rec["id"])
                                     new.append(rec)
-                            if len(places) < 15:
-                                break
+                                    added += 1
+                            if len(places) < 15 or ll is None or added < 5:
+                                break  # last page, or diminishing returns: do not spend more credits here
                         roofers = [x for x in new if x["_industry_query"] == "Roofing" and x.get("_lat") is not None]
                         if roofers:
                             with ThreadPoolExecutor(8) as ex:
