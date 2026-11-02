@@ -4,6 +4,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 MAX=${1:-2500}
+python3 start.py --yes  # preferred: checks your clipboard key, then runs every step below
 python3 -m mincac_leads.cli storms 90
 python3 -m mincac_leads.cli places "$MAX" tier1,tier2,tier3
 python3 -m mincac_leads.cli candidates out/places_candidates.csv

@@ -48,6 +48,7 @@ def run(tiers=("tier1", "tier2", "tier3"), max_requests=2500, pages=3):
                           headers={"X-Goog-FieldMask": "places.id", **({"X-Goog-Api-Key": key} if key else {})})
     if probe.status_code != 200:
         raise SystemExit(f"Places API not authorized ({probe.status_code}): {probe.text[:300]}")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     seen = set()
     if OUT.exists():
         seen = {json.loads(l)["id"] for l in OUT.open()}

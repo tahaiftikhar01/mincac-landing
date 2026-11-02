@@ -50,6 +50,7 @@ def build(days=90):
                     if inch >= 1.0:
                         a["big_hail"] += 1
                 a["last"] = max(a["last"], date)
+    CACHE.parent.mkdir(parents=True, exist_ok=True)
     CACHE.write_text(json.dumps(agg))
     return agg
 

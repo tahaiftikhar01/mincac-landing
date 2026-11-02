@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""One command to check your Google key and build the Mincac call list + email targets.
+
+    python3 start.py              # read key from clipboard, validate, confirm, run everything
+    python3 start.py --check      # only validate the key and do one real test search
+    python3 start.py --quick      # validate, then a small 40-request run to inspect the output first
+    python3 start.py --yes        # skip the confirmation prompt
+    python3 start.py --max-requests 1500
+
+The key is read from your clipboard (or GOOGLE_PLACES_API_KEY if already set), is never printed or
+written to disk, and is passed only to the child processes this script starts.
+Runs are resumable: re-run the same command and finished searches are skipped.
+"""
+import argparse
+import json
+import os
+import platform
+import re
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+try:
+    import requests
+except ImportError:
+    sys.exit("The 'requests' package is missing. Run:  python3 -m pip install --user requests")
+
+HERE = Path(__file__).resolve().parent
+URL = "https://places.googleapis.com/v1/places:searchText"
+KEY_RE = re.compile(r"^AIza[0-9A-Za-z_\-]{35}$")
+
+
+def read_clipboard():
+    cmds = []
+    if platform.system() == "Darwin":
+        cmds = [["pbpaste"]]
+    elif platform.system() == "Windows":
+        cmds = [["powershell", "-NoProfile", "-Command", "Get-Clipboard"]]
+    else:
+        cmds = [["xclip", "-selection", "clipboard", "-o"], ["xsel", "--clipboard", "--output"],
+                ["wl-paste"]]
+    for c in cmds:
+        if shutil.which(c[0]):
+            try:
+                out = subprocess.run(c, capture_output=True, text=True, timeout=10).stdout
+                return out.strip().strip("\"'")
+            except Exception:
+                pass
+    return ""
+
+
+def get_key():
+    key = os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
+    src = "the GOOGLE_PLACES_API_KEY variable"
+    if not key:
+        key, src = read_clipboard(), "your clipboard"
+    if not key:
+        sys.exit("Nothing found. Copy your API key (Google Cloud > APIs & Services > Credentials > Show key), "
+                 "then run this again.")
+    if not KEY_RE.match(key):
+        why = []
+        if not key.startswith("AIza"):
+            why.append("it does not start with 'AIza'")
+        if len(key) != 39:
+            why.append(f"it is {len(key)} characters long (a Google API key is 39)")
+        if re.search(r"\s", key):
+            why.append("it contains spaces or line breaks (you may have copied more than the key)")
+        sys.exit(f"The text in {src} does not look like a Google API key: " + "; ".join(why) +
+                 ".\nGo back to the Credentials page, click 'Show key', copy it again and re-run.")
+    return key, src
+
+
+def check_key(key):
+    """One real search. Returns (ok, message)."""
+    try:
+        r = requests.post(URL, timeout=30, json={"textQuery": "roofing contractor in Omaha, NE", "pageSize": 3},
+                          headers={"X-Goog-Api-Key": key, "X-Goog-FieldMask": "places.id,places.displayName"})
+    except requests.RequestException as e:
+        return False, f"Could not reach Google ({e.__class__.__name__}). Check your internet connection."
+    if r.status_code == 200:
+        names = [p["displayName"]["text"] for p in r.json().get("places", [])]
+        return True, f"Key works. Test search returned: {', '.join(names) or 'no results'}"
+    try:
+        err = r.json()["error"]
+    except Exception:
+        return False, f"Unexpected reply {r.status_code}: {r.text[:200]}"
+    reason = next((d.get("reason") for d in err.get("details", []) if d.get("reason")), "")
+    msg = err.get("message", "")
+    fixes = {
+        "API_KEY_INVALID": "Google says this key is invalid. Copy it again from Credentials > Show key.",
+        "API_KEY_SERVICE_BLOCKED": "The key is restricted to other APIs. Edit the key > API restrictions > tick 'Places API (New)'.",
+        "SERVICE_DISABLED": "Places API (New) is not enabled in the key's project. Enable it in APIs & Services > Library.",
+        "API_KEY_HTTP_REFERRER_BLOCKED": "Key has a website restriction. Edit the key > Application restrictions > None.",
+        "API_KEY_IP_ADDRESS_BLOCKED": "Key has an IP restriction. Edit the key > Application restrictions > None.",
+        "BILLING_DISABLED": "Billing is not active on this project. Link a billing account under Billing.",
+    }
+    hint = fixes.get(reason) or ("Billing may not be linked to this project (Billing > check the project has an "
+                                  "active billing account)." if r.status_code == 403 else "")
+    return False, f"Google replied {r.status_code} {err.get('status', '')} {reason}: {msg}\n  Fix: {hint}"
+
+
+def run(args, env, label):
+    print(f"\n=== {label} ===", flush=True)
+    t = time.time()
+    p = subprocess.run([sys.executable, "-m", "mincac_leads.cli", *args], cwd=HERE, env=env)
+    if p.returncode != 0:
+        sys.exit(f"Step '{label}' failed (exit {p.returncode}). Fix the error above and re-run: finished work is kept.")
+    print(f"({time.time() - t:.0f}s)", flush=True)
+
+
+def count(path):
+    p = HERE / path
+    return sum(1 for _ in open(p)) - 1 if p.exists() else 0
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--check", action="store_true", help="validate the key only")
+    ap.add_argument("--quick", action="store_true", help="40-request trial run")
+    ap.add_argument("--yes", action="store_true", help="skip confirmation")
+    ap.add_argument("--max-requests", type=int, default=2500)
+    ap.add_argument("--tiers", default="tier1,tier2,tier3")
+    a = ap.parse_args()
+
+    key, src = get_key()
+    print(f"Read a key from {src} (AIza...{key[-4:]}). Testing it with Google...")
+    ok, msg = check_key(key)
+    print(("OK: " if ok else "FAILED: ") + msg)
+    if not ok:
+        sys.exit(1)
+    if a.check:
+        return
+
+    n = 40 if a.quick else a.max_requests
+    cost = n * 0.032
+    print(f"\nPlan: up to {n} Places searches (about ${cost:.0f} at list price; Google's monthly free allowance "
+          f"may cover part), then check every website, then build the call list and email targets.")
+    if not a.yes and input("Start? [y/N] ").strip().lower() != "y":
+        sys.exit("Cancelled. Nothing was spent.")
+
+    (HERE / "data" / "raw").mkdir(parents=True, exist_ok=True)
+    (HERE / "out").mkdir(exist_ok=True)
+    env = {**os.environ, "GOOGLE_PLACES_API_KEY": key}
+    run(["storms", "90"], env, "1/6 NOAA storm reports (hail and wind, last 90 days)")
+    run(["places", str(n), a.tiers], env, f"2/6 Google Places search (cap {n} requests)")
+    run(["candidates", "out/places_candidates.csv"], env, "3/6 Clean, de-duplicate, drop franchises")
+    run(["fingerprint", "out/places_candidates.csv"], env, "4/6 Check each website for chat, 24/7, ads (slowest step)")
+    run(["calllist", "out/places_candidates.csv", "out/call_list.csv"], env, "5/6 Build call list")
+    run(["emailtargets", "out/places_candidates.csv", "out/email_targets.csv", "4000"], env, "6/6 Build email targets")
+
+    print("\nDone.")
+    print(f"  Call list     : {HERE / 'out' / 'call_list.csv'}  ({count('out/call_list.csv')} rows)")
+    print(f"  Email targets : {HERE / 'out' / 'email_targets.csv'}  ({count('out/email_targets.csv')} rows)")
+    print("Before dialing: scrub the call list against the National Do Not Call registry and dial manually.")
+
+
+if __name__ == "__main__":
+    main()
