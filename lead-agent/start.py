@@ -52,10 +52,13 @@ def read_clipboard():
     return ""
 
 
-def get_key():
-    key = os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
+def get_key(ask=False):
+    key = "" if ask else os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
     src = "the GOOGLE_PLACES_API_KEY variable"
-    if not key:
+    if ask:
+        key = getpass.getpass("Paste the key and press Enter (input is hidden): ").strip().strip("\"'")
+        src = "the hidden prompt"
+    elif not key:
         key, src = read_clipboard(), "your clipboard"
     if not KEY_RE.match(key) and sys.stdin.isatty():
         print("The clipboard does not hold a Google API key (you may have copied a command since).")
@@ -142,6 +145,13 @@ def diagnose(key):
         print("  The key works for other Google APIs but Places (New) rejects it. Edit the key: set API restrictions "
               "to 'Don't restrict key' and Application restrictions to None, save, wait 2 minutes, re-run. If it then "
               "works, re-restrict to Places API (New).")
+    elif res["places_header"][0] == 403 and "caller does not have permission" in res["places_header"][1].lower():
+        print("  The key is valid and reaches Google, but Google refuses it for Places (New) with no reason given.")
+        print("  Check in this order, waiting 2 minutes and re-running after each change:")
+        print("   1. Billing: console.cloud.google.com/billing > the project that owns this key must be listed under")
+        print("      an ACTIVE billing account (not closed, not 'unlinked').")
+        print("   2. Key settings: edit the key > API restrictions = 'Don't restrict key', Application restrictions = None.")
+        print("   3. Try your other key: python3 start.py --ask --diagnose (paste the 'Maps Platform API Key').")
     elif "not authorized" in msgs or "has not been used" in msgs or "disabled" in msgs:
         print("  Places API (New) is not enabled in the project that owns this key. Open APIs & Services > Library, "
               "check the project name at the top is the one that created the key, and click Enable on Places API (New).")
@@ -170,12 +180,13 @@ def main():
     ap.add_argument("--check", action="store_true", help="validate the key only")
     ap.add_argument("--quick", action="store_true", help="40-request trial run")
     ap.add_argument("--diagnose", action="store_true", help="explain why Google rejects the key")
+    ap.add_argument("--ask", action="store_true", help="ignore the clipboard and type/paste the key at a hidden prompt")
     ap.add_argument("--yes", action="store_true", help="skip confirmation")
     ap.add_argument("--max-requests", type=int, default=2500)
     ap.add_argument("--tiers", default="tier1,tier2,tier3")
     a = ap.parse_args()
 
-    key, src = get_key()
+    key, src = get_key(a.ask)
     print(f"Read a key from {src} (AIza...{key[-4:]}). Testing it with Google...")
     ok, msg = check_key(key)
     print(("OK: " if ok else "FAILED: ") + msg)
