@@ -1,4 +1,7 @@
-"""Google Places API (New) discovery. Needs env GOOGLE_PLACES_API_KEY.
+"""Google Places API (New) discovery.
+
+Auth: either a Network secret that injects the X-Goog-Api-Key header for places.googleapis.com
+(preferred: the key never enters the session), or env GOOGLE_PLACES_API_KEY.
 
 Text Search returns up to 20 places per request and up to 3 pages per query. Every request is
 counted against --max-requests so spend is capped. Results append to data/raw/places.jsonl and are
@@ -28,8 +31,10 @@ def _search(key, text, token=None):
     body = {"textQuery": text, "pageSize": 20, "regionCode": "US"}
     if token:
         body["pageToken"] = token
-    r = requests.post(URL, json=body, timeout=30,
-                      headers={"X-Goog-Api-Key": key, "X-Goog-FieldMask": FIELDS})
+    headers = {"X-Goog-FieldMask": FIELDS}
+    if key:
+        headers["X-Goog-Api-Key"] = key
+    r = requests.post(URL, json=body, timeout=30, headers=headers)
     if r.status_code == 429:
         time.sleep(5)
         return _search(key, text, token)
@@ -38,9 +43,11 @@ def _search(key, text, token=None):
 
 
 def run(tiers=("tier1", "tier2", "tier3"), max_requests=2500, pages=3):
-    key = os.environ.get("GOOGLE_PLACES_API_KEY")
-    if not key:
-        raise SystemExit("GOOGLE_PLACES_API_KEY is not set in this environment")
+    key = os.environ.get("GOOGLE_PLACES_API_KEY")  # optional when the proxy injects the header
+    probe = requests.post(URL, json={"textQuery": "roofing contractor in Omaha, NE", "pageSize": 1}, timeout=30,
+                          headers={"X-Goog-FieldMask": "places.id", **({"X-Goog-Api-Key": key} if key else {})})
+    if probe.status_code != 200:
+        raise SystemExit(f"Places API not authorized ({probe.status_code}): {probe.text[:300]}")
     seen = set()
     if OUT.exists():
         seen = {json.loads(l)["id"] for l in OUT.open()}

@@ -33,7 +33,7 @@ Follow the stages in `lead-agent/README.md` in order. Rules that never bend:
 
 ## Volume lists (call list + email list)
 
-Source is the Google Places API (env `GOOGLE_PLACES_API_KEY`), not Firecrawl. Run `lead-agent/run_lists.sh 2500`
+Source is the Google Places API, not Firecrawl. Auth comes from a Network secret that injects `X-Goog-Api-Key` for `places.googleapis.com` (or env `GOOGLE_PLACES_API_KEY`). `places.run` probes once and stops if unauthorized. Run `lead-agent/run_lists.sh 2500`
 (2,500 Text Search requests is about $50-90 after Google's free monthly allowance). It writes:
 
 - `out/call_list.csv`: looser filter, ranked by tier then intent (storm, ads, hours, nochat, small, noweb).

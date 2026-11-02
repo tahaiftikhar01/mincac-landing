@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the call list and email targets. Requires GOOGLE_PLACES_API_KEY in the environment.
+# Build the call list and email targets. Needs Places auth: Network secret (X-Goog-Api-Key) or GOOGLE_PLACES_API_KEY.
 # Usage: ./run_lists.sh [max_places_requests]
 set -euo pipefail
 cd "$(dirname "$0")"
