@@ -229,8 +229,33 @@ def cmd_qualify(path, reviews_map="data/raw/reviews_map.json"):
     print(f"{len(good)} qualified, {len(bad)} excluded; confidence {c}", file=sys.stderr)
 
 
+def cmd_places(max_requests="2500", tiers="tier1,tier2,tier3"):
+    from . import places
+    places.run(tuple(tiers.split(",")), int(max_requests))
+
+
+def cmd_storms(days="90"):
+    from . import storms
+    print(len(storms.build(int(days))), "counties with storm reports")
+
+
+def cmd_candidates(out_path):
+    from . import leadlists
+    leadlists.places_to_candidates(out_path)
+
+
+def cmd_calllist(cands_path, out_path="out/call_list.csv"):
+    from . import leadlists
+    leadlists.call_list(cands_path, out_path)
+
+
+def cmd_emailtargets(cands_path, out_path="out/email_targets.csv", n="4000"):
+    from . import leadlists
+    leadlists.email_targets(cands_path, out_path, int(n))
+
+
 def main():
-    if len(sys.argv) < 3 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe", "discover", "qualify"}:
+    if len(sys.argv) < 2 or sys.argv[1] not in {"fingerprint", "emails", "reviews", "dedupe", "discover", "qualify", "places", "storms", "candidates", "calllist", "emailtargets"}:
         print(__doc__)
         sys.exit(1)
     globals()[f"cmd_{sys.argv[1]}"](*sys.argv[2:])
