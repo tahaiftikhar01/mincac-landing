@@ -81,7 +81,7 @@ def get_key(ask=False):
             why.append(f"it is {len(key)} characters long (a Serper key is about 40 letters and numbers)")
         if re.search(r"\s", key):
             why.append("it contains spaces or line breaks (you may have copied more than the key)")
-        sys.exit(f"The text in {src} does not look like a Google API key: " + "; ".join(why) +
+        sys.exit(f"The text in {src} does not look like a {'Serper' if PROVIDER == 'serper' else 'Google'} API key: " + "; ".join(why) +
                  ".\nCopy the key again and re-run.")
     return key, src
 
@@ -189,7 +189,8 @@ def main():
     ap.add_argument("--provider", choices=["google", "serper"], default="google")
     ap.add_argument("--ask", action="store_true", help="ignore the clipboard and type/paste the key at a hidden prompt")
     ap.add_argument("--yes", action="store_true", help="skip confirmation")
-    ap.add_argument("--max-requests", type=int, default=2500)
+    ap.add_argument("--max-requests", type=int, default=None,
+                    help="search cap (default 800 for serper = about 2,400 credits, 2500 for google)")
     ap.add_argument("--tiers", default="tier1,tier2,tier3")
     a = ap.parse_args()
     global PROVIDER
@@ -218,10 +219,11 @@ def main():
     if a.check:
         return
 
-    n = 40 if a.quick else a.max_requests
+    n = 40 if a.quick else (a.max_requests or (800 if PROVIDER == "serper" else 2500))
     if PROVIDER == "serper":
-        print(f"\nPlan: up to {n} Serper search requests (each uses Serper credits; the free signup credits are "
-              f"about 2,500), then check every website, then build the call list and email targets.")
+        print(f"\nPlan: up to {n} Serper searches. Each costs 3 credits, so up to {n * 3} credits (free signup "
+              f"credits are about 2,500; paid credits are roughly $1 per 1,000). Then check every website and build "
+              f"the call list and email targets.")
     else:
         print(f"\nPlan: up to {n} Places searches (about ${n * 0.032:.0f} at list price), then check every website, "
               f"then build the call list and email targets.")

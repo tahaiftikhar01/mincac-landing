@@ -76,7 +76,18 @@ def _convert(p, industry, tier, query):
     lat, lon = p.get("latitude"), p.get("longitude")
     comps = [{"shortText": city, "types": ["locality"]}, {"shortText": st, "types": ["administrative_area_level_1"]}]
     cat = p.get("category") or p.get("type") or ""
-    return {
+    oh, lines = p.get("openingHours"), []
+    if isinstance(oh, dict):
+        lines = [f"{d}: {v}" for d, v in oh.items() if v]
+    elif isinstance(oh, list):
+        for it in oh:
+            if isinstance(it, str):
+                lines.append(it)
+            elif isinstance(it, dict):
+                day, hrs = it.get("day") or it.get("name"), it.get("hours") or it.get("time")
+                if day and hrs:
+                    lines.append(f"{day}: {hrs}")
+    rec = {
         "id": "serper:" + cid, "displayName": {"text": p.get("title") or ""}, "formattedAddress": addr,
         "addressComponents": comps, "nationalPhoneNumber": p.get("phoneNumber") or p.get("phone") or "",
         "websiteUri": p.get("website") or "", "rating": p.get("rating"),
@@ -85,6 +96,9 @@ def _convert(p, industry, tier, query):
         "googleMapsUri": f"https://www.google.com/maps?cid={cid}", "_lat": lat, "_lon": lon,
         "_industry_query": industry, "_tier": tier, "_query": query,
     }
+    if lines:
+        rec["regularOpeningHours"] = {"weekdayDescriptions": lines}
+    return rec
 
 
 def run(tiers=("tier1", "tier2", "tier3"), max_requests=2000, pages=3):
