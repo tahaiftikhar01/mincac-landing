@@ -12,6 +12,7 @@ written to disk, and is passed only to the child processes this script starts.
 Runs are resumable: re-run the same command and finished searches are skipped.
 """
 import argparse
+import getpass
 import json
 import os
 import platform
@@ -56,6 +57,10 @@ def get_key():
     src = "the GOOGLE_PLACES_API_KEY variable"
     if not key:
         key, src = read_clipboard(), "your clipboard"
+    if not KEY_RE.match(key) and sys.stdin.isatty():
+        print("The clipboard does not hold a Google API key (you may have copied a command since).")
+        key = getpass.getpass("Copy the key again, paste it here and press Enter (input is hidden): ").strip().strip("\"'")
+        src = "the hidden prompt"
     if not key:
         sys.exit("Nothing found. Copy your API key (Google Cloud > APIs & Services > Credentials > Show key), "
                  "then run this again.")
@@ -101,6 +106,51 @@ def check_key(key):
     return False, f"Google replied {r.status_code} {err.get('status', '')} {reason}: {msg}\n  Fix: {hint}"
 
 
+def diagnose(key):
+    """Send the same key to several Google APIs and print exact replies (key text is scrubbed)."""
+    def scrub(t):
+        return str(t).replace(key, "KEY")
+
+    def show(label, r):
+        try:
+            j = r.json()
+        except Exception:
+            j = {"raw": r.text[:200]}
+        e = j.get("error") if isinstance(j.get("error"), dict) else None
+        if e:
+            reasons = [d.get("reason") for d in e.get("details", []) if isinstance(d, dict) and d.get("reason")]
+            out = f"{e.get('status')} {reasons or ''} | {e.get('message')}"
+        else:
+            out = f"{j.get('status', '')} | {j.get('error_message', '') or ('ok' if r.status_code == 200 else j)}"
+        print(f"  {label:<34} HTTP {r.status_code}: {scrub(out)[:330]}")
+        return r.status_code, scrub(out)
+
+    print("\nDiagnosis (same key, different Google APIs):")
+    res = {}
+    body = {"textQuery": "roofing contractor in Omaha, NE", "pageSize": 1}
+    hdr = {"X-Goog-FieldMask": "places.id"}
+    res["places_header"] = show("Places (New), key in header", requests.post(URL, json=body, timeout=30, headers={**hdr, "X-Goog-Api-Key": key}))
+    res["places_query"] = show("Places (New), key in URL", requests.post(URL, params={"key": key}, json=body, timeout=30, headers=hdr))
+    res["geocode"] = show("Geocoding API", requests.get("https://maps.googleapis.com/maps/api/geocode/json", params={"address": "Omaha NE", "key": key}, timeout=30))
+    res["places_legacy"] = show("Places legacy text search", requests.get("https://maps.googleapis.com/maps/api/place/textsearch/json", params={"query": "roofing Omaha", "key": key}, timeout=30))
+    msgs = " ".join(v[1].lower() for v in res.values())
+    print("\nReading:")
+    if "billing" in msgs:
+        print("  Billing is the problem. Open console.cloud.google.com/billing, link an active billing account to the "
+              "project that owns this key, wait 2 minutes and re-run.")
+    elif res["geocode"][0] == 200 and "ok" in res["geocode"][1].lower()[:12] and res["places_header"][0] != 200:
+        print("  The key works for other Google APIs but Places (New) rejects it. Edit the key: set API restrictions "
+              "to 'Don't restrict key' and Application restrictions to None, save, wait 2 minutes, re-run. If it then "
+              "works, re-restrict to Places API (New).")
+    elif "not authorized" in msgs or "has not been used" in msgs or "disabled" in msgs:
+        print("  Places API (New) is not enabled in the project that owns this key. Open APIs & Services > Library, "
+              "check the project name at the top is the one that created the key, and click Enable on Places API (New).")
+    elif "invalid" in msgs:
+        print("  Google says the key text is invalid. Copy it again from Credentials > Show key.")
+    else:
+        print("  No clear single cause. Send the four lines above to Claude.")
+
+
 def run(args, env, label):
     print(f"\n=== {label} ===", flush=True)
     t = time.time()
@@ -119,6 +169,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="validate the key only")
     ap.add_argument("--quick", action="store_true", help="40-request trial run")
+    ap.add_argument("--diagnose", action="store_true", help="explain why Google rejects the key")
     ap.add_argument("--yes", action="store_true", help="skip confirmation")
     ap.add_argument("--max-requests", type=int, default=2500)
     ap.add_argument("--tiers", default="tier1,tier2,tier3")
@@ -128,6 +179,8 @@ def main():
     print(f"Read a key from {src} (AIza...{key[-4:]}). Testing it with Google...")
     ok, msg = check_key(key)
     print(("OK: " if ok else "FAILED: ") + msg)
+    if not ok or a.diagnose:
+        diagnose(key)
     if not ok:
         sys.exit(1)
     if a.check:
